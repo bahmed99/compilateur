@@ -35,4 +35,6 @@ attribut get_symbol_value(sid symb_id);
 /* set the value of symbol symb_id to value */
 attribut set_symbol_value(sid symb_id,attribut value);
 
+
+int exister_symbol_value(sid symb_id);
 #endif

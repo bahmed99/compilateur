@@ -112,7 +112,17 @@ arith_exp : MOINS arith_exp %prec UNA
 atom_exp : NUM {printf("LOAD %d \n", $1->int_val);}
 | FLOAT    
 | STRING    
-| ID      {attribut x = get_symbol_value($1->nom);printf("LOAD fp + %d \n", x->adresse);}
+| ID      {
+          if(! exister_symbol_value($1->nom))
+          {
+          printf(" erreur : %s non declarée \n" , $1->nom);
+          exit (-1);
+          }
+          else
+          {
+          attribut x = get_symbol_value($1->nom);printf("LOAD fp + %d \n", x->adresse);
+          }
+          }
 | control_exp
 | funcall_exp
 | LPAR exp RPAR

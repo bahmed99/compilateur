@@ -672,10 +672,10 @@ static const yytype_uint8 yyrline[] =
 {
        0,    67,    67,    69,    73,    74,    79,    80,    83,    88,
       91,    94,    95,    99,   100,   103,   104,   105,   106,   107,
-     108,   109,   112,   113,   114,   115,   116,   117,   118,   121,
-     125,   128,   129,   130,   131,   134,   135,   138,   141,   142,
-     145,   146,   147,   148,   149,   150,   154,   154,   154,   154,
-     154
+     108,   109,   112,   113,   114,   115,   126,   127,   128,   131,
+     135,   138,   139,   140,   141,   144,   145,   148,   151,   152,
+     155,   156,   157,   158,   159,   160,   164,   164,   164,   164,
+     164
 };
 #endif
 
@@ -1344,12 +1344,22 @@ yyreduce:
 
   case 25: /* atom_exp: ID  */
 #line 115 "myml.y"
-          {attribut x = get_symbol_value((yyvsp[0].val)->nom);printf("LOAD fp + %d \n", x->adresse);}
-#line 1349 "y.tab.c"
+          {
+          if(! exister_symbol_value((yyvsp[0].val)->nom))
+          {
+          printf(" erreur : %s non declarée \n" , (yyvsp[0].val)->nom);
+          exit (-1);
+          }
+          else
+          {
+          attribut x = get_symbol_value((yyvsp[0].val)->nom);printf("LOAD fp + %d \n", x->adresse);
+          }
+          }
+#line 1359 "y.tab.c"
     break;
 
 
-#line 1353 "y.tab.c"
+#line 1363 "y.tab.c"
 
       default: break;
     }
@@ -1542,7 +1552,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 157 "myml.y"
+#line 167 "myml.y"
  
 int main () {
   /* The code below is just a standard usage example.
