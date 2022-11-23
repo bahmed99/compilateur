@@ -22,7 +22,7 @@
 
 /* type used for string id, this could be changes with another coding */
 
-typedef void* sid;
+typedef char* sid;
 
 /* insert a string into the structure giving back its (unique) sid */
 sid string_to_sid(char * s);

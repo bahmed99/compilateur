@@ -80,7 +80,9 @@ let_def : def_id
 | def_fun
 ;
 
-def_id : LET ID EQ exp          {set_symbol_value($2->nom,$4);}     
+def_id : LET ID EQ exp          {adresse_suivante($4);
+                                set_symbol_value($2->nom,$4);
+                                  }     
 ;
 
 def_fun : LET fun_head EQ exp {printf("Une définition de fonction\n");}
@@ -110,7 +112,7 @@ arith_exp : MOINS arith_exp %prec UNA
 atom_exp : NUM {printf("LOAD %d \n", $1->int_val);}
 | FLOAT    
 | STRING    
-| ID      {attribut x = get_symbol_value($1->nom);printf("LOAD %d \n", x->int_val);}
+| ID      {attribut x = get_symbol_value($1->nom);printf("LOAD fp + %d \n", x->adresse);}
 | control_exp
 | funcall_exp
 | LPAR exp RPAR

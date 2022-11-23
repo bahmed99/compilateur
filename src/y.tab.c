@@ -670,12 +670,12 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    67,    67,    69,    73,    74,    79,    80,    83,    86,
-      89,    92,    93,    97,    98,   101,   102,   103,   104,   105,
-     106,   107,   110,   111,   112,   113,   114,   115,   116,   119,
-     123,   126,   127,   128,   129,   132,   133,   136,   139,   140,
-     143,   144,   145,   146,   147,   148,   152,   152,   152,   152,
-     152
+       0,    67,    67,    69,    73,    74,    79,    80,    83,    88,
+      91,    94,    95,    99,   100,   103,   104,   105,   106,   107,
+     108,   109,   112,   113,   114,   115,   116,   117,   118,   121,
+     125,   128,   129,   130,   131,   134,   135,   138,   141,   142,
+     145,   146,   147,   148,   149,   150,   154,   154,   154,   154,
+     154
 };
 #endif
 
@@ -1300,54 +1300,56 @@ yyreduce:
     {
   case 8: /* def_id: LET ID EQ exp  */
 #line 83 "myml.y"
-                                {set_symbol_value((yyvsp[-2].val)->nom,(yyvsp[0].val));}
-#line 1305 "y.tab.c"
+                                {adresse_suivante((yyvsp[0].val));
+                                set_symbol_value((yyvsp[-2].val)->nom,(yyvsp[0].val));
+                                  }
+#line 1307 "y.tab.c"
     break;
 
   case 9: /* def_fun: LET fun_head EQ exp  */
-#line 86 "myml.y"
+#line 88 "myml.y"
                               {printf("Une définition de fonction\n");}
-#line 1311 "y.tab.c"
+#line 1313 "y.tab.c"
     break;
 
   case 16: /* arith_exp: arith_exp MOINS arith_exp  */
-#line 102 "myml.y"
+#line 104 "myml.y"
                             {printf("SUBI \n") ;}
-#line 1317 "y.tab.c"
+#line 1319 "y.tab.c"
     break;
 
   case 17: /* arith_exp: arith_exp PLUS arith_exp  */
-#line 103 "myml.y"
+#line 105 "myml.y"
                            {printf("ADDI \n");}
-#line 1323 "y.tab.c"
+#line 1325 "y.tab.c"
     break;
 
   case 18: /* arith_exp: arith_exp DIV arith_exp  */
-#line 104 "myml.y"
+#line 106 "myml.y"
                           {printf("DIVI\n");}
-#line 1329 "y.tab.c"
+#line 1331 "y.tab.c"
     break;
 
   case 19: /* arith_exp: arith_exp MULT arith_exp  */
-#line 105 "myml.y"
+#line 107 "myml.y"
                            {printf("MULTI \n");}
-#line 1335 "y.tab.c"
+#line 1337 "y.tab.c"
     break;
 
   case 22: /* atom_exp: NUM  */
-#line 110 "myml.y"
+#line 112 "myml.y"
                {printf("LOAD %d \n", (yyvsp[0].val)->int_val);}
-#line 1341 "y.tab.c"
+#line 1343 "y.tab.c"
     break;
 
   case 25: /* atom_exp: ID  */
-#line 113 "myml.y"
-          {attribut x = get_symbol_value((yyvsp[0].val)->nom);printf("LOAD %d \n", x->int_val);}
-#line 1347 "y.tab.c"
+#line 115 "myml.y"
+          {attribut x = get_symbol_value((yyvsp[0].val)->nom);printf("LOAD fp + %d \n", x->adresse);}
+#line 1349 "y.tab.c"
     break;
 
 
-#line 1351 "y.tab.c"
+#line 1353 "y.tab.c"
 
       default: break;
     }
@@ -1540,7 +1542,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 155 "myml.y"
+#line 157 "myml.y"
  
 int main () {
   /* The code below is just a standard usage example.
