@@ -1,26 +1,24 @@
-/*
- *  Attribut.h
- *
- *  Module defining teh type of attributes in 
- *  symbol table.
- *
- */
+
 
 #ifndef ATTRIBUT_H
 #define ATTRIBUT_H
+#include <stdlib.h>
 
-#include <stdio.h>
 
 
-typedef int symb_value_type;
- /* Dummy definition of symbol_value_type.
-    Could be instead a structure with as many fields
-    as needed for the compiler such as:
-    - name in source code
-    - name (or position in the stack) in the target code
-    - type (if ever)
-    - other info....
- */
+typedef enum {INT} symb_value_type;
+
+struct ATTRIBUT {
+
+  char* nom;
+  symb_value_type type;
+  int int_val;
+
+};
+
+typedef struct ATTRIBUT *attribut;
+
+attribut creer_attribut();
 
 
 #endif

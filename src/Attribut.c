@@ -1,9 +1,10 @@
-/*
- *  Attribut.c
- *
- */
+
 
 #include "Attribut.h"
 
-/* HERE COMES YOUR CODE */
 
+
+attribut creer_attribut() {
+    attribut a = malloc(sizeof(attribut));
+    return a;
+};

@@ -2,15 +2,17 @@
 /* avoid dependency with library fl */
 
 %{ 
+#include "Attribut.h"
 #include "y.tab.h"
 #include "Table_des_symboles.h"
 #include <stdio.h>
+
 
 %}
 
 whitespace          [ \t\r\n\f]+
 
-digit               [0-9]
+digit               [0-9] 
 alpha               [a-zA-Z]
 alphanum            [a-zA-Z0-9]
 
@@ -27,7 +29,7 @@ all_but_star        []
 identifier          [[:alpha:]][[:alnum:]_]*
 
 %% 
-"/*".*"*/"   /* commentaire en ML */
+
 "++"         {return CONCAT;}
 "+"          {return PLUS;}
 "-"          {return MOINS;}
@@ -55,7 +57,16 @@ identifier          [[:alpha:]][[:alnum:]_]*
 ";"          {return PV;}
 
 {float}      {return FLOAT; }
-{integer}    {return NUM; }
-{identifier} {string_to_sid(yytext); return ID;}
+{integer}    {
+     yylval.val = creer_attribut();
+    yylval.val -> nom = yytext;
+    yylval.val -> type = INT;
+    yylval.val -> int_val = atoi(yytext);
+    return NUM;
+  }
+{identifier} {  yylval.val = creer_attribut();
+              yylval.val->nom = string_to_sid(yytext); 
+              return ID;}
 {string}     {return STRING;}
 {whitespace} ;
+ 

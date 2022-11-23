@@ -5,6 +5,7 @@
 #include "Attribut.h"  
 #include "Table_des_symboles.h"
 #include <stdio.h>
+#include <string.h>
 
 FILE * file_in = NULL;
 FILE * file_out = NULL;
@@ -16,10 +17,21 @@ void yyerror (char* s) {
    printf("\n%s\n",s);
  }
 
+
+
 %}
 
 
-%token NUM FLOAT ID STRING
+
+%union {
+  attribut val;
+}
+%token <val> NUM 
+%token <val> ID 
+
+%type <val> exp
+
+%token  STRING FLOAT
 
 %token PV LPAR RPAR LET IN VIR
 
@@ -28,11 +40,10 @@ void yyerror (char* s) {
 %token ISLT ISGT ISLEQ ISGEQ ISEQ
 %left ISEQ
 %left ISLT ISGT ISLEQ ISGEQ
-
-
 %token AND OR NOT BOOL
 %left OR
 %left AND
+
 
 
 
@@ -43,6 +54,8 @@ void yyerror (char* s) {
 %nonassoc UNA    /* pseudo token pour assurer une priorite locale */
 
 
+
+
 %start prog 
  
 
@@ -51,15 +64,14 @@ void yyerror (char* s) {
 
  /* a program is a list of instruction */
 
-prog : inst PV {printf("Une instruction\n");}
+prog : inst PV 
 
-| prog inst PV {printf("Une autre instruction\n");}
-;
+| prog inst PV 
 
 /* a instruction is either a value or a definition (that indeed looks like an affectation) */
 
 inst : let_def
-| exp
+| exp 
 ;
 
 
@@ -68,7 +80,7 @@ let_def : def_id
 | def_fun
 ;
 
-def_id : LET ID EQ exp  {printf("Une définition d'ID\n");}
+def_id : LET ID EQ exp          {set_symbol_value($2->nom,$4);}     
 ;
 
 def_fun : LET fun_head EQ exp {printf("Une définition de fonction\n");}
@@ -82,23 +94,23 @@ id_list : ID
 ;
 
 
-exp : arith_exp
+exp : arith_exp 
 | let_exp
 ;
 
 arith_exp : MOINS arith_exp %prec UNA
-| arith_exp MOINS arith_exp
-| arith_exp PLUS arith_exp
-| arith_exp DIV arith_exp
-| arith_exp MULT arith_exp
+| arith_exp MOINS arith_exp {printf("SUBI \n") ;}
+| arith_exp PLUS arith_exp {printf("ADDI \n");}
+| arith_exp DIV arith_exp {printf("DIVI\n");}
+| arith_exp MULT arith_exp {printf("MULTI \n");}
 | arith_exp CONCAT arith_exp
-| atom_exp
+| atom_exp 
 ;
 
-atom_exp : NUM
-| FLOAT
-| STRING
-| ID
+atom_exp : NUM {printf("LOAD %d \n", $1->int_val);}
+| FLOAT    
+| STRING    
+| ID      {attribut x = get_symbol_value($1->nom);printf("LOAD %d \n", x->int_val);}
 | control_exp
 | funcall_exp
 | LPAR exp RPAR
