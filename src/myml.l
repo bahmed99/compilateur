@@ -56,9 +56,15 @@ identifier          [[:alpha:]][[:alnum:]_]*
 ","          {return VIR;}
 ";"          {return PV;}
 
-{float}      {return FLOAT; }
+{float}      {
+              yylval.val = creer_attribut();
+              yylval.val -> nom = yytext;
+              yylval.val -> type = FLOA;
+              yylval.val -> int_val = atoi(yytext);
+              return FLOAT; 
+              } 
 {integer}    {
-     yylval.val = creer_attribut();
+    yylval.val = creer_attribut();
     yylval.val -> nom = yytext;
     yylval.val -> type = INT;
     yylval.val -> int_val = atoi(yytext);

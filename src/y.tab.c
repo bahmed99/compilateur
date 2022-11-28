@@ -135,8 +135,8 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     NUM = 258,                     /* NUM  */
     ID = 259,                      /* ID  */
-    STRING = 260,                  /* STRING  */
-    FLOAT = 261,                   /* FLOAT  */
+    FLOAT = 260,                   /* FLOAT  */
+    STRING = 261,                  /* STRING  */
     PV = 262,                      /* PV  */
     LPAR = 263,                    /* LPAR  */
     RPAR = 264,                    /* RPAR  */
@@ -172,8 +172,8 @@ extern int yydebug;
 #define YYUNDEF 257
 #define NUM 258
 #define ID 259
-#define STRING 260
-#define FLOAT 261
+#define FLOAT 260
+#define STRING 261
 #define PV 262
 #define LPAR 263
 #define RPAR 264
@@ -233,8 +233,8 @@ enum yysymbol_kind_t
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
   YYSYMBOL_NUM = 3,                        /* NUM  */
   YYSYMBOL_ID = 4,                         /* ID  */
-  YYSYMBOL_STRING = 5,                     /* STRING  */
-  YYSYMBOL_FLOAT = 6,                      /* FLOAT  */
+  YYSYMBOL_FLOAT = 5,                      /* FLOAT  */
+  YYSYMBOL_STRING = 6,                     /* STRING  */
   YYSYMBOL_PV = 7,                         /* PV  */
   YYSYMBOL_LPAR = 8,                       /* LPAR  */
   YYSYMBOL_RPAR = 9,                       /* RPAR  */
@@ -616,7 +616,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  22
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  50
+#define YYNRULES  52
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  90
 
@@ -670,12 +670,12 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    67,    67,    69,    73,    74,    79,    80,    83,    88,
-      91,    94,    95,    99,   100,   103,   104,   105,   106,   107,
-     108,   109,   112,   113,   114,   115,   126,   127,   128,   131,
-     135,   138,   139,   140,   141,   144,   145,   148,   151,   152,
-     155,   156,   157,   158,   159,   160,   164,   164,   164,   164,
-     164
+       0,    68,    68,    70,    74,    75,    80,    81,    84,    90,
+      93,    96,    97,   101,   102,   105,   106,   107,   108,   109,
+     110,   111,   114,   115,   125,   126,   136,   137,   138,   141,
+     145,   148,   149,   151,   152,   153,   154,   158,   159,   162,
+     165,   166,   169,   170,   171,   172,   173,   174,   178,   178,
+     178,   178,   178
 };
 #endif
 
@@ -691,8 +691,8 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "NUM", "ID", "STRING",
-  "FLOAT", "PV", "LPAR", "RPAR", "LET", "IN", "VIR", "IF", "THEN", "ELSE",
+  "\"end of file\"", "error", "\"invalid token\"", "NUM", "ID", "FLOAT",
+  "STRING", "PV", "LPAR", "RPAR", "LET", "IN", "VIR", "IF", "THEN", "ELSE",
   "ISLT", "ISGT", "ISLEQ", "ISGEQ", "ISEQ", "AND", "OR", "NOT", "BOOL",
   "PLUS", "MOINS", "MULT", "DIV", "EQ", "CONCAT", "UNA", "$accept", "prog",
   "inst", "let_def", "def_id", "def_fun", "fun_head", "id_list", "exp",
@@ -737,15 +737,15 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,    22,    25,    24,    23,     0,     0,    31,     0,     0,
+       0,    22,    25,    23,    24,     0,     0,    31,     0,     0,
        0,     4,     6,     7,     5,    13,    21,    26,    29,     0,
       14,    27,     0,     0,     0,     0,     0,    15,     1,     0,
-       2,     0,     0,     0,     0,     0,     0,     0,     0,    38,
-       0,    28,     0,     0,     0,     3,    35,    36,    17,    16,
-      19,    18,    20,     0,     0,    40,     0,     0,    33,     0,
-      37,     0,    11,     0,     8,     9,     0,     0,    43,    46,
-      47,    48,    49,    50,     0,    32,     0,     0,     0,    39,
-      10,     0,    45,    44,    42,    41,    34,     0,    12,    30
+       2,     0,     0,     0,     0,     0,     0,     0,     0,    40,
+       0,    28,     0,     0,     0,     3,    37,    38,    17,    16,
+      19,    18,    20,     0,     0,    42,     0,     0,    33,     0,
+      39,     0,    11,     0,     8,     9,     0,     0,    45,    48,
+      49,    50,    51,    52,     0,    32,     0,     0,     0,    41,
+      10,     0,    47,    46,    44,    43,    34,     0,    12,    30
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -822,9 +822,9 @@ static const yytype_int8 yyr1[] =
        0,    32,    33,    33,    34,    34,    35,    35,    36,    37,
       38,    39,    39,    40,    40,    41,    41,    41,    41,    41,
       41,    41,    42,    42,    42,    42,    42,    42,    42,    43,
-      44,    45,    46,    47,    48,    49,    49,    50,    51,    51,
-      52,    52,    52,    52,    52,    52,    53,    53,    53,    53,
-      53
+      44,    45,    46,    47,    48,    47,    48,    49,    49,    50,
+      51,    51,    52,    52,    52,    52,    52,    52,    53,    53,
+      53,    53,    53
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -833,9 +833,9 @@ static const yytype_int8 yyr2[] =
        0,     2,     2,     3,     1,     1,     1,     1,     4,     4,
        4,     1,     3,     1,     1,     2,     3,     3,     3,     3,
        3,     1,     1,     1,     1,     1,     1,     1,     3,     1,
-       6,     1,     3,     1,     1,     3,     3,     4,     1,     3,
-       1,     3,     3,     2,     3,     3,     1,     1,     1,     1,
-       1
+       6,     1,     3,     1,     1,     1,     1,     3,     3,     4,
+       1,     3,     1,     3,     3,     2,     3,     3,     1,     1,
+       1,     1,     1
 };
 
 
@@ -1298,68 +1298,89 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
+  case 5: /* inst: exp  */
+#line 75 "myml.y"
+      {printf("DROP /n");}
+#line 1305 "y.tab.c"
+    break;
+
   case 8: /* def_id: LET ID EQ exp  */
-#line 83 "myml.y"
-                                {adresse_suivante((yyvsp[0].val));
-                                set_symbol_value((yyvsp[-2].val)->nom,(yyvsp[0].val));
-                                  }
-#line 1307 "y.tab.c"
+#line 84 "myml.y"
+                                { attribut c = copy_attribut((yyvsp[0].val));
+                                 int x =adresse_suivante();
+                                 c->adresse = x;
+                                 set_symbol_value((yyvsp[-2].val)->nom,c);}
+#line 1314 "y.tab.c"
     break;
 
   case 9: /* def_fun: LET fun_head EQ exp  */
-#line 88 "myml.y"
+#line 90 "myml.y"
                               {printf("Une définition de fonction\n");}
-#line 1313 "y.tab.c"
+#line 1320 "y.tab.c"
     break;
 
   case 16: /* arith_exp: arith_exp MOINS arith_exp  */
-#line 104 "myml.y"
+#line 106 "myml.y"
                             {printf("SUBI \n") ;}
-#line 1319 "y.tab.c"
+#line 1326 "y.tab.c"
     break;
 
   case 17: /* arith_exp: arith_exp PLUS arith_exp  */
-#line 105 "myml.y"
+#line 107 "myml.y"
                            {printf("ADDI \n");}
-#line 1325 "y.tab.c"
+#line 1332 "y.tab.c"
     break;
 
   case 18: /* arith_exp: arith_exp DIV arith_exp  */
-#line 106 "myml.y"
+#line 108 "myml.y"
                           {printf("DIVI\n");}
-#line 1331 "y.tab.c"
+#line 1338 "y.tab.c"
     break;
 
   case 19: /* arith_exp: arith_exp MULT arith_exp  */
-#line 107 "myml.y"
+#line 109 "myml.y"
                            {printf("MULTI \n");}
-#line 1337 "y.tab.c"
+#line 1344 "y.tab.c"
     break;
 
   case 22: /* atom_exp: NUM  */
-#line 112 "myml.y"
+#line 114 "myml.y"
                {printf("LOAD %d \n", (yyvsp[0].val)->int_val);}
-#line 1343 "y.tab.c"
+#line 1350 "y.tab.c"
     break;
 
-  case 25: /* atom_exp: ID  */
+  case 23: /* atom_exp: FLOAT  */
 #line 115 "myml.y"
           {
           if(! exister_symbol_value((yyvsp[0].val)->nom))
           {
-          printf(" erreur : %s non declarée \n" , (yyvsp[0].val)->nom);
+          printf("erreur : %s non declarée \n" , (yyvsp[0].val)->nom);
           exit (-1);
           }
           else
           {
           attribut x = get_symbol_value((yyvsp[0].val)->nom);printf("LOAD fp + %d \n", x->adresse);
+          }}
+#line 1365 "y.tab.c"
+    break;
+
+  case 25: /* atom_exp: ID  */
+#line 126 "myml.y"
+          {
+          if(! exister_symbol_value((yyvsp[0].val)->nom))
+          {
+          printf("erreur : %s non declarée \n" , (yyvsp[0].val)->nom);
+          exit (-1);
           }
-          }
-#line 1359 "y.tab.c"
+          else
+          {
+          attribut x = get_symbol_value((yyvsp[0].val)->nom);printf("LOAD fp + %d \n", x->adresse);
+          }}
+#line 1380 "y.tab.c"
     break;
 
 
-#line 1363 "y.tab.c"
+#line 1384 "y.tab.c"
 
       default: break;
     }
@@ -1552,7 +1573,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 167 "myml.y"
+#line 181 "myml.y"
  
 int main () {
   /* The code below is just a standard usage example.

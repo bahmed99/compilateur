@@ -56,8 +56,8 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     NUM = 258,                     /* NUM  */
     ID = 259,                      /* ID  */
-    STRING = 260,                  /* STRING  */
-    FLOAT = 261,                   /* FLOAT  */
+    FLOAT = 260,                   /* FLOAT  */
+    STRING = 261,                  /* STRING  */
     PV = 262,                      /* PV  */
     LPAR = 263,                    /* LPAR  */
     RPAR = 264,                    /* RPAR  */
@@ -93,8 +93,8 @@ extern int yydebug;
 #define YYUNDEF 257
 #define NUM 258
 #define ID 259
-#define STRING 260
-#define FLOAT 261
+#define FLOAT 260
+#define STRING 261
 #define PV 262
 #define LPAR 263
 #define RPAR 264

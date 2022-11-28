@@ -6,7 +6,7 @@
 
 
 
-typedef enum {INT} symb_value_type;
+typedef enum {INT,FLOA} symb_value_type;
 
 struct ATTRIBUT {
 
@@ -21,6 +21,10 @@ typedef struct ATTRIBUT *attribut;
 
 attribut creer_attribut();
 
-void adresse_suivante(attribut a);
+int adresse_suivante();
+
+attribut copy_attribut(attribut);
+
+
 
 #endif

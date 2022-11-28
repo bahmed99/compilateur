@@ -28,10 +28,11 @@ void yyerror (char* s) {
 }
 %token <val> NUM 
 %token <val> ID 
+%token <val> FLOAT 
 
-%type <val> exp
+%type <val> exp 
 
-%token  STRING FLOAT
+%token  STRING
 
 %token PV LPAR RPAR LET IN VIR
 
@@ -71,8 +72,7 @@ prog : inst PV
 /* a instruction is either a value or a definition (that indeed looks like an affectation) */
 
 inst : let_def
-| exp 
-;
+| exp {printf("DROP \n");};
 
 
 
@@ -80,9 +80,10 @@ let_def : def_id
 | def_fun
 ;
 
-def_id : LET ID EQ exp          {adresse_suivante($4);
-                                set_symbol_value($2->nom,$4);
-                                  }     
+def_id : LET ID EQ exp          { attribut c = copy_attribut($4);
+                                 int x =adresse_suivante();
+                                 c->adresse = x;
+                                 set_symbol_value($2->nom,c);}     
 ;
 
 def_fun : LET fun_head EQ exp {printf("Une définition de fonction\n");}
@@ -110,19 +111,27 @@ arith_exp : MOINS arith_exp %prec UNA
 ;
 
 atom_exp : NUM {printf("LOAD %d \n", $1->int_val);}
-| FLOAT    
-| STRING    
-| ID      {
+| FLOAT   {
           if(! exister_symbol_value($1->nom))
           {
-          printf(" erreur : %s non declarée \n" , $1->nom);
+          printf("erreur : %s non declarée \n" , $1->nom);
           exit (-1);
           }
           else
           {
           attribut x = get_symbol_value($1->nom);printf("LOAD fp + %d \n", x->adresse);
+          }} 
+| STRING    
+| ID      {
+          if(! exister_symbol_value($1->nom))
+          {
+          printf("erreur : %s non declarée \n" , $1->nom);
+          exit (-1);
           }
-          }
+          else
+          {
+          attribut x = get_symbol_value($1->nom);printf("LOAD fp + %d \n", x->adresse);
+          }}
 | control_exp
 | funcall_exp
 | LPAR exp RPAR
@@ -136,9 +145,13 @@ if_exp : if cond then atom_exp else atom_exp
 ;
 
 if : IF;
-cond : LPAR bool RPAR;
+cond : LPAR bool RPAR ;
+
 then : THEN;
 else : ELSE;
+then : THEN;
+else : ELSE ;    
+
 
 
 let_exp : let_def IN atom_exp 
@@ -156,7 +169,7 @@ bool : BOOL
 | bool OR bool
 | bool AND bool
 | NOT bool %prec UNA 
-| exp comp exp
+| exp comp exp 
 | LPAR bool RPAR
 ;
 

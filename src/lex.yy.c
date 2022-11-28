@@ -874,13 +874,19 @@ YY_RULE_SETUP
 case 22:
 YY_RULE_SETUP
 #line 59 "myml.l"
-{return FLOAT; }
+{
+              yylval.val = creer_attribut();
+              yylval.val -> nom = yytext;
+              yylval.val -> type = FLOA;
+              yylval.val -> int_val = atoi(yytext);
+              return FLOAT; 
+              } 
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 60 "myml.l"
+#line 66 "myml.l"
 {
-     yylval.val = creer_attribut();
+    yylval.val = creer_attribut();
     yylval.val -> nom = yytext;
     yylval.val -> type = INT;
     yylval.val -> int_val = atoi(yytext);
@@ -889,7 +895,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 67 "myml.l"
+#line 73 "myml.l"
 {  yylval.val = creer_attribut();
               yylval.val->nom = string_to_sid(yytext); 
               return ID;}
@@ -897,21 +903,21 @@ YY_RULE_SETUP
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 70 "myml.l"
+#line 76 "myml.l"
 {return STRING;}
 	YY_BREAK
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 71 "myml.l"
+#line 77 "myml.l"
 ;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 72 "myml.l"
+#line 78 "myml.l"
 ECHO;
 	YY_BREAK
-#line 915 "lex.yy.c"
+#line 921 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1916,4 +1922,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 72 "myml.l"
+#line 78 "myml.l"
