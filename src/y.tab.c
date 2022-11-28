@@ -206,9 +206,11 @@ union YYSTYPE
 {
 #line 26 "myml.y"
 
-  attribut val;
+ int val_int;
+ char* val_string;
+ float val_float;
 
-#line 212 "y.tab.c"
+#line 214 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -670,12 +672,12 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    68,    68,    70,    74,    75,    80,    81,    84,    90,
-      93,    96,    97,   101,   102,   105,   106,   107,   108,   109,
-     110,   111,   114,   115,   125,   126,   136,   137,   138,   141,
-     145,   148,   149,   151,   152,   153,   154,   158,   159,   162,
-     165,   166,   169,   170,   171,   172,   173,   174,   178,   178,
-     178,   178,   178
+       0,    70,    70,    72,    76,    77,    81,    82,    85,    92,
+      95,    98,    99,   103,   104,   107,   108,   109,   110,   111,
+     112,   113,   116,   117,   118,   119,   129,   130,   131,   134,
+     138,   141,   142,   144,   145,   146,   147,   151,   152,   155,
+     158,   159,   162,   163,   164,   165,   166,   167,   171,   171,
+     171,   171,   171
 };
 #endif
 
@@ -1299,88 +1301,80 @@ yyreduce:
   switch (yyn)
     {
   case 5: /* inst: exp  */
-#line 75 "myml.y"
-      {printf("DROP /n");}
-#line 1305 "y.tab.c"
+#line 77 "myml.y"
+      {printf("DROP \n");}
+#line 1307 "y.tab.c"
     break;
 
   case 8: /* def_id: LET ID EQ exp  */
-#line 84 "myml.y"
-                                { attribut c = copy_attribut((yyvsp[0].val));
+#line 85 "myml.y"
+                                {symbol_value_type c = creer_symbol_value_type();
                                  int x =adresse_suivante();
                                  c->adresse = x;
-                                 set_symbol_value((yyvsp[-2].val)->nom,c);}
-#line 1314 "y.tab.c"
+                                 c->nom = (yyvsp[-2].val_string);
+                                 set_symbol_value((yyvsp[-2].val_string),c);}
+#line 1317 "y.tab.c"
     break;
 
   case 9: /* def_fun: LET fun_head EQ exp  */
-#line 90 "myml.y"
+#line 92 "myml.y"
                               {printf("Une définition de fonction\n");}
-#line 1320 "y.tab.c"
+#line 1323 "y.tab.c"
     break;
 
   case 16: /* arith_exp: arith_exp MOINS arith_exp  */
-#line 106 "myml.y"
+#line 108 "myml.y"
                             {printf("SUBI \n") ;}
-#line 1326 "y.tab.c"
+#line 1329 "y.tab.c"
     break;
 
   case 17: /* arith_exp: arith_exp PLUS arith_exp  */
-#line 107 "myml.y"
-                           {printf("ADDI \n");}
-#line 1332 "y.tab.c"
+#line 109 "myml.y"
+                           {printf("ADDI \n") ;  (yyval.val_int)=(yyvsp[-2].val_int)+(yyvsp[0].val_int);}
+#line 1335 "y.tab.c"
     break;
 
   case 18: /* arith_exp: arith_exp DIV arith_exp  */
-#line 108 "myml.y"
+#line 110 "myml.y"
                           {printf("DIVI\n");}
-#line 1338 "y.tab.c"
+#line 1341 "y.tab.c"
     break;
 
   case 19: /* arith_exp: arith_exp MULT arith_exp  */
-#line 109 "myml.y"
+#line 111 "myml.y"
                            {printf("MULTI \n");}
-#line 1344 "y.tab.c"
+#line 1347 "y.tab.c"
     break;
 
   case 22: /* atom_exp: NUM  */
-#line 114 "myml.y"
-               {printf("LOAD %d \n", (yyvsp[0].val)->int_val);}
-#line 1350 "y.tab.c"
+#line 116 "myml.y"
+               {printf("LOAD %d \n", (yyvsp[0].val_int));}
+#line 1353 "y.tab.c"
     break;
 
   case 23: /* atom_exp: FLOAT  */
-#line 115 "myml.y"
-          {
-          if(! exister_symbol_value((yyvsp[0].val)->nom))
-          {
-          printf("erreur : %s non declarée \n" , (yyvsp[0].val)->nom);
-          exit (-1);
-          }
-          else
-          {
-          attribut x = get_symbol_value((yyvsp[0].val)->nom);printf("LOAD fp + %d \n", x->adresse);
-          }}
-#line 1365 "y.tab.c"
+#line 117 "myml.y"
+           {printf("LOAD %f \n", (yyvsp[0].val_float)) ;}
+#line 1359 "y.tab.c"
     break;
 
   case 25: /* atom_exp: ID  */
-#line 126 "myml.y"
+#line 119 "myml.y"
           {
-          if(! exister_symbol_value((yyvsp[0].val)->nom))
+          if(! exister_symbol_value((yyvsp[0].val_string)))
           {
-          printf("erreur : %s non declarée \n" , (yyvsp[0].val)->nom);
+          printf("erreur : %s non declarée \n" , (yyvsp[0].val_string));
           exit (-1);
           }
           else
           {
-          attribut x = get_symbol_value((yyvsp[0].val)->nom);printf("LOAD fp + %d \n", x->adresse);
+          symbol_value_type x = get_symbol_value((yyvsp[0].val_string));printf("LOAD fp + %d \n", x->adresse);
           }}
-#line 1380 "y.tab.c"
+#line 1374 "y.tab.c"
     break;
 
 
-#line 1384 "y.tab.c"
+#line 1378 "y.tab.c"
 
       default: break;
     }
@@ -1573,7 +1567,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 181 "myml.y"
+#line 174 "myml.y"
  
 int main () {
   /* The code below is just a standard usage example.

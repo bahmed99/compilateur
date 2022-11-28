@@ -24,15 +24,17 @@ void yyerror (char* s) {
 
 
 %union {
-  attribut val;
+ int val_int;
+ char* val_string;
+ float val_float;
 }
-%token <val> NUM 
-%token <val> ID 
-%token <val> FLOAT 
+%token <val_int> NUM 
+%token <val_string> ID 
+%token <val_float> FLOAT 
 
-%type <val> exp 
+%type <val_int> exp arith_exp
 
-%token  STRING
+%token  STRING 
 
 %token PV LPAR RPAR LET IN VIR
 
@@ -80,10 +82,11 @@ let_def : def_id
 | def_fun
 ;
 
-def_id : LET ID EQ exp          { attribut c = copy_attribut($4);
+def_id : LET ID EQ exp          {symbol_value_type c = creer_symbol_value_type();
                                  int x =adresse_suivante();
                                  c->adresse = x;
-                                 set_symbol_value($2->nom,c);}     
+                                 c->nom = $2;
+                                 set_symbol_value($2,c);}     
 ;
 
 def_fun : LET fun_head EQ exp {printf("Une définition de fonction\n");}
@@ -103,34 +106,25 @@ exp : arith_exp
 
 arith_exp : MOINS arith_exp %prec UNA
 | arith_exp MOINS arith_exp {printf("SUBI \n") ;}
-| arith_exp PLUS arith_exp {printf("ADDI \n");}
+| arith_exp PLUS arith_exp {printf("ADDI \n") ;  $$=$1+$3;}
 | arith_exp DIV arith_exp {printf("DIVI\n");}
 | arith_exp MULT arith_exp {printf("MULTI \n");}
 | arith_exp CONCAT arith_exp
 | atom_exp 
 ;
 
-atom_exp : NUM {printf("LOAD %d \n", $1->int_val);}
-| FLOAT   {
-          if(! exister_symbol_value($1->nom))
-          {
-          printf("erreur : %s non declarée \n" , $1->nom);
-          exit (-1);
-          }
-          else
-          {
-          attribut x = get_symbol_value($1->nom);printf("LOAD fp + %d \n", x->adresse);
-          }} 
+atom_exp : NUM {printf("LOAD %d \n", $1);}
+| FLOAT    {printf("LOAD %f \n", $1) ;}
 | STRING    
 | ID      {
-          if(! exister_symbol_value($1->nom))
+          if(! exister_symbol_value($1))
           {
-          printf("erreur : %s non declarée \n" , $1->nom);
+          printf("erreur : %s non declarée \n" , $1);
           exit (-1);
           }
           else
           {
-          attribut x = get_symbol_value($1->nom);printf("LOAD fp + %d \n", x->adresse);
+          symbol_value_type x = get_symbol_value($1);printf("LOAD fp + %d \n", x->adresse);
           }}
 | control_exp
 | funcall_exp

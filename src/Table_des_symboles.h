@@ -30,10 +30,10 @@
 
 
 /* get the symbol value of symb_id from the symbol table */
-attribut get_symbol_value(sid symb_id);
+symbol_value_type get_symbol_value(sid symb_id);
 
 /* set the value of symbol symb_id to value */
-attribut set_symbol_value(sid symb_id,attribut value);
+symbol_value_type set_symbol_value(sid symb_id,symbol_value_type value);
 
 
 int exister_symbol_value(sid symb_id);

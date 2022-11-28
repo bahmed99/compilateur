@@ -21,7 +21,7 @@ extern FILE * file_out;
 
 typedef struct elem {
 	sid symbol_name;
-	attribut symbol_value;
+	symbol_value_type symbol_value;
 	struct elem * next;
 } elem;
 
@@ -47,7 +47,7 @@ int exister_symbol_value(sid symb_id) {
 
 
 /* get the symbol value of symb_id from the symbol table */
-attribut get_symbol_value(sid symb_id) {
+symbol_value_type get_symbol_value(sid symb_id) {
 	elem * tracker=storage;
 	/* look into the linked list for the symbol value */
 	while (tracker) {
@@ -61,7 +61,7 @@ attribut get_symbol_value(sid symb_id) {
 };
 
 /* set the value of symbol symb_id to value */
-attribut set_symbol_value(sid symb_id,attribut value) {
+symbol_value_type set_symbol_value(sid symb_id,symbol_value_type value) {
 
 	elem * tracker;
 	

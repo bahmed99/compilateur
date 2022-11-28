@@ -92,9 +92,9 @@ Terminaux, suivis des règles où ils apparaissent
 
     $end (0) 0
     error (256)
-    NUM <val> (258) 21
-    ID <val> (259) 7 9 10 11 24 38
-    FLOAT <val> (260) 22
+    NUM <val_int> (258) 21
+    ID <val_string> (259) 7 9 10 11 24 38
+    FLOAT <val_float> (260) 22
     STRING (261) 23
     PV (262) 1 2
     LPAR (263) 9 27 31 38 46
@@ -148,10 +148,10 @@ Non-terminaux, suivis des règles où ils apparaissent
     id_list (39)
         à gauche: 10 11
         à droite: 9 11
-    exp <val> (40)
+    exp <val_int> (40)
         à gauche: 12 13
         à droite: 4 7 8 27 45
-    arith_exp (41)
+    arith_exp <val_int> (41)
         à gauche: 14 15 16 17 18 19 20
         à droite: 12 14 15 16 17 18 19 39 40
     atom_exp (42)

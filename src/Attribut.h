@@ -6,24 +6,25 @@
 
 
 
-typedef enum {INT,FLOA} symb_value_type;
+typedef enum {INT,FLOA} type;
 
-struct ATTRIBUT {
+struct  symbol_value_type {
 
   char* nom;
-  symb_value_type type;
-  int int_val;
+  type type;
   int adresse; 
 
 };
 
-typedef struct ATTRIBUT *attribut;
+typedef struct  symbol_value_type* symbol_value_type;
 
-attribut creer_attribut();
+symbol_value_type creer_symbol_value_type();
 
 int adresse_suivante();
 
-attribut copy_attribut(attribut);
+symbol_value_type copy_symbol_value_type(symbol_value_type);
+
+symbol_value_type exp_arith(symbol_value_type , symbol_value_type , char*);
 
 
 

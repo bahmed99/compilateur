@@ -127,9 +127,11 @@ union YYSTYPE
 {
 #line 26 "myml.y"
 
-  attribut val;
+ int val_int;
+ char* val_string;
+ float val_float;
 
-#line 133 "y.tab.h"
+#line 135 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
