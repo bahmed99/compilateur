@@ -16,6 +16,11 @@ int adresse_suivante() {
     return adresse++;
 };
 
+int label = 0;
+int label_suivant() {
+    return label++;
+};
+
 symbol_value_type copy_symbol_value_type(symbol_value_type x) {
   symbol_value_type a;
   a  = malloc (sizeof(symbol_value_type));

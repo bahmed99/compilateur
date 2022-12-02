@@ -22,6 +22,8 @@ symbol_value_type creer_symbol_value_type();
 
 int adresse_suivante();
 
+int label_suivant();
+
 symbol_value_type copy_symbol_value_type(symbol_value_type);
 
 symbol_value_type exp_arith(symbol_value_type , symbol_value_type , char*);

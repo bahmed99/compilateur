@@ -22,17 +22,20 @@ void yyerror (char* s) {
 %}
 
 
-
 %union {
  int val_int;
  char* val_string;
  float val_float;
+ int num_label;
+ char* char_comp;
 }
 %token <val_int> NUM 
 %token <val_string> ID 
 %token <val_float> FLOAT 
 
-%type <val_int> exp arith_exp
+%type <val_int>  arith_exp
+%type <num_label> else cond
+%type <char_comp>  comp
 
 %token  STRING 
 
@@ -82,11 +85,15 @@ let_def : def_id
 | def_fun
 ;
 
-def_id : LET ID EQ exp          {symbol_value_type c = creer_symbol_value_type();
-                                 int x =adresse_suivante();
-                                 c->adresse = x;
-                                 c->nom = $2;
-                                 set_symbol_value($2,c);}     
+def_id : LET ID EQ exp          {
+                                  if(! exister_symbol_value($2)){
+                                    symbol_value_type c = creer_symbol_value_type();
+                                    int x =adresse_suivante();
+                                    c->adresse = x;
+                                    c->nom = $2;
+                                    set_symbol_value($2,c);
+                                  }
+                                  }     
 ;
 
 def_fun : LET fun_head EQ exp {printf("Une définition de fonction\n");}
@@ -105,16 +112,16 @@ exp : arith_exp
 ;
 
 arith_exp : MOINS arith_exp %prec UNA
-| arith_exp MOINS arith_exp {printf("SUBI \n") ;}
+| arith_exp MOINS arith_exp {printf("SUBI \n") ;$$=$1-$3;}
 | arith_exp PLUS arith_exp {printf("ADDI \n") ;  $$=$1+$3;}
-| arith_exp DIV arith_exp {printf("DIVI\n");}
-| arith_exp MULT arith_exp {printf("MULTI \n");}
+| arith_exp DIV arith_exp {printf("DIVI\n");$$=$1/$3;}
+| arith_exp MULT arith_exp {printf("MULTI \n");$$=$1*$3;}
 | arith_exp CONCAT arith_exp
 | atom_exp 
 ;
 
-atom_exp : NUM {printf("LOAD %d \n", $1);}
-| FLOAT    {printf("LOAD %f \n", $1) ;}
+atom_exp : NUM {printf("LOADI %d \n", $1);}
+| FLOAT        {printf("LOADI %f \n", $1) ;}
 | STRING    
 | ID      {
           if(! exister_symbol_value($1))
@@ -135,20 +142,28 @@ control_exp : if_exp
 ;
 
 
-if_exp : if cond then atom_exp else atom_exp 
-;
-
-if : IF;
-cond : LPAR bool RPAR ;
-
-then : THEN;
-else : ELSE;
-then : THEN;
-else : ELSE ;    
+if_exp : if cond then atom_exp else atom_exp {printf("L%d:\n",$5);}
 
 
+if : IF 
+cond : LPAR bool RPAR 
+{  int l = label_suivant();
+  printf("IFN L%d\n",l);
+  $$=l;
+  }
 
-let_exp : let_def IN atom_exp 
+then : THEN ;
+else : ELSE {
+  int l=label_suivant();
+  printf("GOTO L%d\n",l);
+  printf("L%d:\n",l -1 );
+  $$=l;
+  }
+   
+
+
+
+let_exp : let_def IN atom_exp {printf("DRCP\n");}
 | let_def IN let_exp
 ;
 
@@ -163,12 +178,16 @@ bool : BOOL
 | bool OR bool
 | bool AND bool
 | NOT bool %prec UNA 
-| exp comp exp 
+| exp comp exp {printf("%s\n",$2);}
 | LPAR bool RPAR
 ;
 
 
-comp :  ISLT | ISGT | ISLEQ | ISGEQ | ISEQ
+comp :  ISLT {$$="LT";}
+| ISGT {$$="GT";}
+| ISLEQ {$$="LEQ";}
+| ISGEQ {$$="GEQ";}
+| ISEQ {$$="EQ";}
 ;
 
 %% 

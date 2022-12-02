@@ -204,13 +204,15 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 26 "myml.y"
+#line 25 "myml.y"
 
  int val_int;
  char* val_string;
  float val_float;
+ int num_label;
+ char* char_comp;
 
-#line 214 "y.tab.c"
+#line 216 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -618,7 +620,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  22
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  52
+#define YYNRULES  50
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  90
 
@@ -672,12 +674,12 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    70,    70,    72,    76,    77,    81,    82,    85,    92,
-      95,    98,    99,   103,   104,   107,   108,   109,   110,   111,
-     112,   113,   116,   117,   118,   119,   129,   130,   131,   134,
-     138,   141,   142,   144,   145,   146,   147,   151,   152,   155,
-     158,   159,   162,   163,   164,   165,   166,   167,   171,   171,
-     171,   171,   171
+       0,    73,    73,    75,    79,    80,    84,    85,    88,    99,
+     102,   105,   106,   110,   111,   114,   115,   116,   117,   118,
+     119,   120,   123,   124,   125,   126,   136,   137,   138,   141,
+     145,   148,   149,   155,   156,   166,   167,   170,   173,   174,
+     177,   178,   179,   180,   181,   182,   186,   187,   188,   189,
+     190
 };
 #endif
 
@@ -742,12 +744,12 @@ static const yytype_int8 yydefact[] =
        0,    22,    25,    23,    24,     0,     0,    31,     0,     0,
        0,     4,     6,     7,     5,    13,    21,    26,    29,     0,
       14,    27,     0,     0,     0,     0,     0,    15,     1,     0,
-       2,     0,     0,     0,     0,     0,     0,     0,     0,    40,
-       0,    28,     0,     0,     0,     3,    37,    38,    17,    16,
-      19,    18,    20,     0,     0,    42,     0,     0,    33,     0,
-      39,     0,    11,     0,     8,     9,     0,     0,    45,    48,
-      49,    50,    51,    52,     0,    32,     0,     0,     0,    41,
-      10,     0,    47,    46,    44,    43,    34,     0,    12,    30
+       2,     0,     0,     0,     0,     0,     0,     0,     0,    38,
+       0,    28,     0,     0,     0,     3,    35,    36,    17,    16,
+      19,    18,    20,     0,     0,    40,     0,     0,    33,     0,
+      37,     0,    11,     0,     8,     9,     0,     0,    43,    46,
+      47,    48,    49,    50,     0,    32,     0,     0,     0,    39,
+      10,     0,    45,    44,    42,    41,    34,     0,    12,    30
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -824,9 +826,9 @@ static const yytype_int8 yyr1[] =
        0,    32,    33,    33,    34,    34,    35,    35,    36,    37,
       38,    39,    39,    40,    40,    41,    41,    41,    41,    41,
       41,    41,    42,    42,    42,    42,    42,    42,    42,    43,
-      44,    45,    46,    47,    48,    47,    48,    49,    49,    50,
-      51,    51,    52,    52,    52,    52,    52,    52,    53,    53,
-      53,    53,    53
+      44,    45,    46,    47,    48,    49,    49,    50,    51,    51,
+      52,    52,    52,    52,    52,    52,    53,    53,    53,    53,
+      53
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -835,9 +837,9 @@ static const yytype_int8 yyr2[] =
        0,     2,     2,     3,     1,     1,     1,     1,     4,     4,
        4,     1,     3,     1,     1,     2,     3,     3,     3,     3,
        3,     1,     1,     1,     1,     1,     1,     1,     3,     1,
-       6,     1,     3,     1,     1,     1,     1,     3,     3,     4,
-       1,     3,     1,     3,     3,     2,     3,     3,     1,     1,
-       1,     1,     1
+       6,     1,     3,     1,     1,     3,     3,     4,     1,     3,
+       1,     3,     3,     2,     3,     3,     1,     1,     1,     1,
+       1
 };
 
 
@@ -1301,65 +1303,69 @@ yyreduce:
   switch (yyn)
     {
   case 5: /* inst: exp  */
-#line 77 "myml.y"
+#line 80 "myml.y"
       {printf("DROP \n");}
-#line 1307 "y.tab.c"
+#line 1309 "y.tab.c"
     break;
 
   case 8: /* def_id: LET ID EQ exp  */
-#line 85 "myml.y"
-                                {symbol_value_type c = creer_symbol_value_type();
-                                 int x =adresse_suivante();
-                                 c->adresse = x;
-                                 c->nom = (yyvsp[-2].val_string);
-                                 set_symbol_value((yyvsp[-2].val_string),c);}
-#line 1317 "y.tab.c"
-    break;
-
-  case 9: /* def_fun: LET fun_head EQ exp  */
-#line 92 "myml.y"
-                              {printf("Une définition de fonction\n");}
+#line 88 "myml.y"
+                                {
+                                  if(! exister_symbol_value((yyvsp[-2].val_string))){
+                                    symbol_value_type c = creer_symbol_value_type();
+                                    int x =adresse_suivante();
+                                    c->adresse = x;
+                                    c->nom = (yyvsp[-2].val_string);
+                                    set_symbol_value((yyvsp[-2].val_string),c);
+                                  }
+                                  }
 #line 1323 "y.tab.c"
     break;
 
-  case 16: /* arith_exp: arith_exp MOINS arith_exp  */
-#line 108 "myml.y"
-                            {printf("SUBI \n") ;}
+  case 9: /* def_fun: LET fun_head EQ exp  */
+#line 99 "myml.y"
+                              {printf("Une définition de fonction\n");}
 #line 1329 "y.tab.c"
     break;
 
-  case 17: /* arith_exp: arith_exp PLUS arith_exp  */
-#line 109 "myml.y"
-                           {printf("ADDI \n") ;  (yyval.val_int)=(yyvsp[-2].val_int)+(yyvsp[0].val_int);}
+  case 16: /* arith_exp: arith_exp MOINS arith_exp  */
+#line 115 "myml.y"
+                            {printf("SUBI \n") ;(yyval.val_int)=(yyvsp[-2].val_int)-(yyvsp[0].val_int);}
 #line 1335 "y.tab.c"
     break;
 
-  case 18: /* arith_exp: arith_exp DIV arith_exp  */
-#line 110 "myml.y"
-                          {printf("DIVI\n");}
+  case 17: /* arith_exp: arith_exp PLUS arith_exp  */
+#line 116 "myml.y"
+                           {printf("ADDI \n") ;  (yyval.val_int)=(yyvsp[-2].val_int)+(yyvsp[0].val_int);}
 #line 1341 "y.tab.c"
     break;
 
-  case 19: /* arith_exp: arith_exp MULT arith_exp  */
-#line 111 "myml.y"
-                           {printf("MULTI \n");}
+  case 18: /* arith_exp: arith_exp DIV arith_exp  */
+#line 117 "myml.y"
+                          {printf("DIVI\n");(yyval.val_int)=(yyvsp[-2].val_int)/(yyvsp[0].val_int);}
 #line 1347 "y.tab.c"
     break;
 
-  case 22: /* atom_exp: NUM  */
-#line 116 "myml.y"
-               {printf("LOAD %d \n", (yyvsp[0].val_int));}
+  case 19: /* arith_exp: arith_exp MULT arith_exp  */
+#line 118 "myml.y"
+                           {printf("MULTI \n");(yyval.val_int)=(yyvsp[-2].val_int)*(yyvsp[0].val_int);}
 #line 1353 "y.tab.c"
     break;
 
-  case 23: /* atom_exp: FLOAT  */
-#line 117 "myml.y"
-           {printf("LOAD %f \n", (yyvsp[0].val_float)) ;}
+  case 22: /* atom_exp: NUM  */
+#line 123 "myml.y"
+               {printf("LOADI %d \n", (yyvsp[0].val_int));}
 #line 1359 "y.tab.c"
     break;
 
+  case 23: /* atom_exp: FLOAT  */
+#line 124 "myml.y"
+               {printf("LOADI %f \n", (yyvsp[0].val_float)) ;}
+#line 1365 "y.tab.c"
+    break;
+
   case 25: /* atom_exp: ID  */
-#line 119 "myml.y"
+#line 126 "myml.y"
           {
           if(! exister_symbol_value((yyvsp[0].val_string)))
           {
@@ -1370,11 +1376,79 @@ yyreduce:
           {
           symbol_value_type x = get_symbol_value((yyvsp[0].val_string));printf("LOAD fp + %d \n", x->adresse);
           }}
-#line 1374 "y.tab.c"
+#line 1380 "y.tab.c"
+    break;
+
+  case 30: /* if_exp: if cond then atom_exp else atom_exp  */
+#line 145 "myml.y"
+                                             {printf("L%d:\n",(yyvsp[-1].num_label));}
+#line 1386 "y.tab.c"
+    break;
+
+  case 32: /* cond: LPAR bool RPAR  */
+#line 150 "myml.y"
+{  int l = label_suivant();
+  printf("IFN L%d\n",l);
+  (yyval.num_label)=l;
+  }
+#line 1395 "y.tab.c"
+    break;
+
+  case 34: /* else: ELSE  */
+#line 156 "myml.y"
+            {
+  int l=label_suivant();
+  printf("GOTO L%d\n",l);
+  printf("L%d:\n",l -1 );
+  (yyval.num_label)=l;
+  }
+#line 1406 "y.tab.c"
+    break;
+
+  case 35: /* let_exp: let_def IN atom_exp  */
+#line 166 "myml.y"
+                              {printf("DRCP\n");}
+#line 1412 "y.tab.c"
+    break;
+
+  case 44: /* bool: exp comp exp  */
+#line 181 "myml.y"
+               {printf("%s\n",(yyvsp[-1].char_comp));}
+#line 1418 "y.tab.c"
+    break;
+
+  case 46: /* comp: ISLT  */
+#line 186 "myml.y"
+             {(yyval.char_comp)="LT";}
+#line 1424 "y.tab.c"
+    break;
+
+  case 47: /* comp: ISGT  */
+#line 187 "myml.y"
+       {(yyval.char_comp)="GT";}
+#line 1430 "y.tab.c"
+    break;
+
+  case 48: /* comp: ISLEQ  */
+#line 188 "myml.y"
+        {(yyval.char_comp)="LEQ";}
+#line 1436 "y.tab.c"
+    break;
+
+  case 49: /* comp: ISGEQ  */
+#line 189 "myml.y"
+        {(yyval.char_comp)="GEQ";}
+#line 1442 "y.tab.c"
+    break;
+
+  case 50: /* comp: ISEQ  */
+#line 190 "myml.y"
+       {(yyval.char_comp)="EQ";}
+#line 1448 "y.tab.c"
     break;
 
 
-#line 1378 "y.tab.c"
+#line 1452 "y.tab.c"
 
       default: break;
     }
@@ -1567,7 +1641,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 174 "myml.y"
+#line 193 "myml.y"
  
 int main () {
   /* The code below is just a standard usage example.

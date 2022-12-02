@@ -1,4 +1,3 @@
-let x=1;
-let y=3;
-let z = x+y;
-z;
+let x = 1;
+let y = if (x == 2) then 3 else 6;
+y;

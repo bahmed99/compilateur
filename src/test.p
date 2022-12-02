@@ -1,7 +1,12 @@
-LOAD 1 
-LOAD 3 
+LOADI 1 
 LOAD fp + 0 
+LOADI 2 
+EQ
+IFN L0
+LOADI 3 
+GOTO L1
+L0:
+LOADI 6 
+L1:
 LOAD fp + 1 
-ADDI 
-LOAD fp + 2 
 DROP 
