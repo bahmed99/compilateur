@@ -1,7 +1,7 @@
 all 	:
 	make -C src/
 
-test 	:  
+test :  all
 	./compil.sh $f
 
 clean	:

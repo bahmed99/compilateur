@@ -1652,14 +1652,14 @@ int main (int argc, char* argv[]) {
      in command line arguements instead of having them hard coded */
 
   stderr = stdin;
-  /* file_out = fopen (argv[2], "w");*/
+   file_out = fopen(argv[2], "w");
   /* opening target code file and redirecting stdout on it */
-   file_out = fopen("test.p","w");
+   /*file_out = fopen("test.p","w");*/
  stdout = file_out; 
-   /*file_in = fopen (argv[1], "w");*/
+  file_in = fopen (argv[1], "r");
 
  /* openng source code file and redirecting stdin from it */
- file_in = fopen("test.ml","r"); 
+  /*file_in = fopen("test.ml","r"); */
  stdin = file_in; 
 
  /* As a starter, on may comment the above line for usual stdin as input */
