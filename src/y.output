@@ -136,7 +136,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     exp (40)
         à gauche: 12 13
         à droite: 4 7 8 27 43
-    arith_exp <val_int> (41)
+    arith_exp (41)
         à gauche: 14 15 16 17 18 19 20
         à droite: 12 14 15 16 17 18 19 37 38
     atom_exp (42)
@@ -151,13 +151,13 @@ Non-terminaux, suivis des règles où ils apparaissent
     if (45)
         à gauche: 30
         à droite: 29
-    cond <num_label> (46)
+    cond (46)
         à gauche: 31
         à droite: 29
-    then (47)
+    then <val_int> (47)
         à gauche: 32
         à droite: 29
-    else <num_label> (48)
+    else <val_int> (48)
         à gauche: 33
         à droite: 29
     let_exp (49)
@@ -172,7 +172,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     bool (52)
         à gauche: 39 40 41 42 43 44
         à droite: 31 40 41 42 44
-    comp <char_comp> (53)
+    comp <val_string> (53)
         à gauche: 45 46 47 48 49
         à droite: 43
 

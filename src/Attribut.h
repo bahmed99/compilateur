@@ -1,33 +1,26 @@
-
+/*
+ *  Attribut.h
+ *
+ *  Module defining teh type of attributes in 
+ *  symbol table.
+ *
+ */
 
 #ifndef ATTRIBUT_H
 #define ATTRIBUT_H
-#include <stdlib.h>
+
+#include <stdio.h>
 
 
-
-typedef enum {INT,FLOA} type;
-
-struct  symbol_value_type {
-
-  char* nom;
-  type type;
-  int adresse; 
-
-};
-
-typedef struct  symbol_value_type* symbol_value_type;
-
-symbol_value_type creer_symbol_value_type();
-
-int adresse_suivante();
-
-int label_suivant();
-
-symbol_value_type copy_symbol_value_type(symbol_value_type);
-
-symbol_value_type exp_arith(symbol_value_type , symbol_value_type , char*);
-
+typedef int symb_value_type;
+ /* Dummy definition of symbol_value_type.
+    Could be instead a structure with as many fields
+    as needed for the compiler such as:
+    - name in source code
+    - name (or position in the stack) in the target code
+    - type (if ever)
+    - other info....
+ */
 
 
 #endif

@@ -30,11 +30,13 @@
 
 
 /* get the symbol value of symb_id from the symbol table */
-symbol_value_type get_symbol_value(sid symb_id);
+symb_value_type get_symbol_value(sid symb_id);
 
 /* set the value of symbol symb_id to value */
-symbol_value_type set_symbol_value(sid symb_id,symbol_value_type value);
+symb_value_type set_symbol_value(sid symb_id,symb_value_type value);
+
+symb_value_type remove_symbol_value();
 
 
-int exister_symbol_value(sid symb_id);
+symb_value_type add_symbol_value(sid symb_id,symb_value_type value);
 #endif

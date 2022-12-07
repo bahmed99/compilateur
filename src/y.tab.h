@@ -125,15 +125,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 25 "myml.y"
+#line 32 "myml.y"
 
  int val_int;
  char* val_string;
  float val_float;
- int num_label;
- char* char_comp;
 
-#line 137 "y.tab.h"
+#line 135 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
