@@ -1,5 +1,9 @@
+LOADI 1 
 LOADI 3 
-SAVEFP
+LOADI 1 
+LOAD (fp + 1)
+ADDI 
+DRCP
+LOAD (fp + 1)
 LOAD (fp + 0)
-CALL call_plusUn
-RESTORE 1
+ADDI 

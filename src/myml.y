@@ -208,7 +208,9 @@ else : ELSE {
 
 
 let_exp : let_def IN atom_exp {if(detect_funcall==0)
-{                             stdout=file_out;
+
+{                             
+                                stdout=file_out;
                                 offset--; 
                                 remove_symbol_value();
 }
@@ -216,8 +218,6 @@ let_exp : let_def IN atom_exp {if(detect_funcall==0)
                               
                               stdout=file_funcall;}
                               printf("DRCP\n"); 
-                              offset_func--;
-                              remove_symbol_value();
                               
                                }
 | let_def IN let_exp

@@ -1,3 +1,3 @@
-let plusUn(x) = x+1;
-let y = 3;
-let z = plusUn(y);
+let x = 1;
+let y = let x = 3 in (1 + x);
+let z = y+x;
