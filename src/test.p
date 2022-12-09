@@ -1,6 +1,4 @@
-LOADI 2 
 LOADI 3 
-LOADI 2 
-MULTI 
-ADDI 
-DROP 
+SAVERP
+LOAD (fp + 0)
+CALL call_plusUn

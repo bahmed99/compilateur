@@ -54,23 +54,25 @@ Grammaire
    34 let_exp: let_def IN atom_exp
    35        | let_def IN let_exp
 
-   36 funcall_exp: ID LPAR arg_list RPAR
+   36 funcall_exp: fun_id LPAR arg_list RPAR
 
-   37 arg_list: arith_exp
-   38         | arg_list VIR arith_exp
+   37 fun_id: ID
 
-   39 bool: BOOL
-   40     | bool OR bool
-   41     | bool AND bool
-   42     | NOT bool
-   43     | exp comp exp
-   44     | LPAR bool RPAR
+   38 arg_list: arith_exp
+   39         | arg_list VIR arith_exp
 
-   45 comp: ISLT
-   46     | ISGT
-   47     | ISLEQ
-   48     | ISGEQ
-   49     | ISEQ
+   40 bool: BOOL
+   41     | bool OR bool
+   42     | bool AND bool
+   43     | NOT bool
+   44     | exp comp exp
+   45     | LPAR bool RPAR
+
+   46 comp: ISLT
+   47     | ISGT
+   48     | ISLEQ
+   49     | ISGEQ
+   50     | ISEQ
 
 
 Terminaux, suivis des règles où ils apparaissent
@@ -78,27 +80,27 @@ Terminaux, suivis des règles où ils apparaissent
     $end (0) 0
     error (256)
     NUM <val_int> (258) 21
-    ID <val_string> (259) 7 9 10 11 24 36
+    ID <val_string> (259) 7 9 10 11 24 37
     FLOAT <val_float> (260) 22
     STRING (261) 23
     PV (262) 1 2
-    LPAR (263) 9 27 31 36 44
-    RPAR (264) 9 27 31 36 44
+    LPAR (263) 9 27 31 36 45
+    RPAR (264) 9 27 31 36 45
     LET (265) 7 8
     IN (266) 34 35
-    VIR (267) 11 38
+    VIR (267) 11 39
     IF (268) 30
     THEN (269) 32
     ELSE (270) 33
-    ISLT (271) 45
-    ISGT (272) 46
-    ISLEQ (273) 47
-    ISGEQ (274) 48
-    ISEQ (275) 49
-    AND (276) 41
-    OR (277) 40
-    NOT (278) 42
-    BOOL (279) 39
+    ISLT (271) 46
+    ISGT (272) 47
+    ISLEQ (273) 48
+    ISGEQ (274) 49
+    ISEQ (275) 50
+    AND (276) 42
+    OR (277) 41
+    NOT (278) 43
+    BOOL (279) 40
     PLUS (280) 16
     MOINS (281) 14 15
     MULT (282) 18
@@ -135,10 +137,10 @@ Non-terminaux, suivis des règles où ils apparaissent
         à droite: 9 11
     exp (40)
         à gauche: 12 13
-        à droite: 4 7 8 27 43
+        à droite: 4 7 8 27 44
     arith_exp (41)
         à gauche: 14 15 16 17 18 19 20
-        à droite: 12 14 15 16 17 18 19 37 38
+        à droite: 12 14 15 16 17 18 19 38 39
     atom_exp (42)
         à gauche: 21 22 23 24 25 26 27
         à droite: 20 29 34
@@ -166,15 +168,18 @@ Non-terminaux, suivis des règles où ils apparaissent
     funcall_exp (50)
         à gauche: 36
         à droite: 26
-    arg_list (51)
-        à gauche: 37 38
-        à droite: 36 38
-    bool (52)
-        à gauche: 39 40 41 42 43 44
-        à droite: 31 40 41 42 44
-    comp <val_string> (53)
-        à gauche: 45 46 47 48 49
-        à droite: 43
+    fun_id <val_string> (51)
+        à gauche: 37
+        à droite: 36
+    arg_list (52)
+        à gauche: 38 39
+        à droite: 36 39
+    bool (53)
+        à gauche: 40 41 42 43 44 45
+        à droite: 31 41 42 43 45
+    comp <val_string> (54)
+        à gauche: 46 47 48 49 50
+        à droite: 44
 
 
 État 0
@@ -203,6 +208,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     if           aller à l'état 19
     let_exp      aller à l'état 20
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 1
@@ -215,10 +221,9 @@ Non-terminaux, suivis des règles où ils apparaissent
 État 2
 
    24 atom_exp: ID •
-   36 funcall_exp: ID • LPAR arg_list RPAR
+   37 fun_id: ID •
 
-    LPAR  décalage et aller à l'état 22
-
+    LPAR     réduction par utilisation de la règle 37 (fun_id)
     $défaut  réduction par utilisation de la règle 24 (atom_exp)
 
 
@@ -260,6 +265,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     if           aller à l'état 19
     let_exp      aller à l'état 20
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 6
@@ -297,6 +303,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     if_exp       aller à l'état 18
     if           aller à l'état 19
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 9
@@ -326,6 +333,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     if           aller à l'état 19
     let_exp      aller à l'état 20
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 10
@@ -431,23 +439,9 @@ Non-terminaux, suivis des règles où ils apparaissent
 
 État 22
 
-   36 funcall_exp: ID LPAR • arg_list RPAR
+   36 funcall_exp: fun_id • LPAR arg_list RPAR
 
-    NUM     décalage et aller à l'état 1
-    ID      décalage et aller à l'état 2
-    FLOAT   décalage et aller à l'état 3
-    STRING  décalage et aller à l'état 4
-    LPAR    décalage et aller à l'état 5
-    IF      décalage et aller à l'état 7
-    MOINS   décalage et aller à l'état 8
-
-    arith_exp    aller à l'état 39
-    atom_exp     aller à l'état 16
-    control_exp  aller à l'état 17
-    if_exp       aller à l'état 18
-    if           aller à l'état 19
-    funcall_exp  aller à l'état 21
-    arg_list     aller à l'état 40
+    LPAR  décalage et aller à l'état 39
 
 
 État 23
@@ -462,7 +456,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
    27 atom_exp: LPAR exp • RPAR
 
-    RPAR  décalage et aller à l'état 41
+    RPAR  décalage et aller à l'état 40
 
 
 État 25
@@ -470,15 +464,15 @@ Non-terminaux, suivis des règles où ils apparaissent
     7 def_id: LET ID • EQ exp
     9 fun_head: ID • LPAR id_list RPAR
 
-    LPAR  décalage et aller à l'état 42
-    EQ    décalage et aller à l'état 43
+    LPAR  décalage et aller à l'état 41
+    EQ    décalage et aller à l'état 42
 
 
 État 26
 
     8 def_fun: LET fun_head • EQ exp
 
-    EQ  décalage et aller à l'état 44
+    EQ  décalage et aller à l'état 43
 
 
 État 27
@@ -504,7 +498,7 @@ Non-terminaux, suivis des règles où ils apparaissent
 
     2 prog: prog inst • PV
 
-    PV  décalage et aller à l'état 45
+    PV  décalage et aller à l'état 44
 
 
 État 30
@@ -530,17 +524,39 @@ Non-terminaux, suivis des règles où ils apparaissent
     let_def      aller à l'état 23
     def_id       aller à l'état 12
     def_fun      aller à l'état 13
-    atom_exp     aller à l'état 46
+    atom_exp     aller à l'état 45
     control_exp  aller à l'état 17
     if_exp       aller à l'état 18
     if           aller à l'état 19
-    let_exp      aller à l'état 47
+    let_exp      aller à l'état 46
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 32
 
    16 arith_exp: arith_exp PLUS • arith_exp
+
+    NUM     décalage et aller à l'état 1
+    ID      décalage et aller à l'état 2
+    FLOAT   décalage et aller à l'état 3
+    STRING  décalage et aller à l'état 4
+    LPAR    décalage et aller à l'état 5
+    IF      décalage et aller à l'état 7
+    MOINS   décalage et aller à l'état 8
+
+    arith_exp    aller à l'état 47
+    atom_exp     aller à l'état 16
+    control_exp  aller à l'état 17
+    if_exp       aller à l'état 18
+    if           aller à l'état 19
+    funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
+
+
+État 33
+
+   15 arith_exp: arith_exp MOINS • arith_exp
 
     NUM     décalage et aller à l'état 1
     ID      décalage et aller à l'état 2
@@ -556,11 +572,12 @@ Non-terminaux, suivis des règles où ils apparaissent
     if_exp       aller à l'état 18
     if           aller à l'état 19
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
-État 33
+État 34
 
-   15 arith_exp: arith_exp MOINS • arith_exp
+   18 arith_exp: arith_exp MULT • arith_exp
 
     NUM     décalage et aller à l'état 1
     ID      décalage et aller à l'état 2
@@ -576,11 +593,12 @@ Non-terminaux, suivis des règles où ils apparaissent
     if_exp       aller à l'état 18
     if           aller à l'état 19
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
-État 34
+État 35
 
-   18 arith_exp: arith_exp MULT • arith_exp
+   17 arith_exp: arith_exp DIV • arith_exp
 
     NUM     décalage et aller à l'état 1
     ID      décalage et aller à l'état 2
@@ -596,11 +614,12 @@ Non-terminaux, suivis des règles où ils apparaissent
     if_exp       aller à l'état 18
     if           aller à l'état 19
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
-État 35
+État 36
 
-   17 arith_exp: arith_exp DIV • arith_exp
+   19 arith_exp: arith_exp CONCAT • arith_exp
 
     NUM     décalage et aller à l'état 1
     ID      décalage et aller à l'état 2
@@ -616,26 +635,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     if_exp       aller à l'état 18
     if           aller à l'état 19
     funcall_exp  aller à l'état 21
-
-
-État 36
-
-   19 arith_exp: arith_exp CONCAT • arith_exp
-
-    NUM     décalage et aller à l'état 1
-    ID      décalage et aller à l'état 2
-    FLOAT   décalage et aller à l'état 3
-    STRING  décalage et aller à l'état 4
-    LPAR    décalage et aller à l'état 5
-    IF      décalage et aller à l'état 7
-    MOINS   décalage et aller à l'état 8
-
-    arith_exp    aller à l'état 52
-    atom_exp     aller à l'état 16
-    control_exp  aller à l'état 17
-    if_exp       aller à l'état 18
-    if           aller à l'état 19
-    funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 37
@@ -646,17 +646,17 @@ Non-terminaux, suivis des règles où ils apparaissent
     ID      décalage et aller à l'état 2
     FLOAT   décalage et aller à l'état 3
     STRING  décalage et aller à l'état 4
-    LPAR    décalage et aller à l'état 53
+    LPAR    décalage et aller à l'état 52
     LET     décalage et aller à l'état 6
     IF      décalage et aller à l'état 7
-    NOT     décalage et aller à l'état 54
-    BOOL    décalage et aller à l'état 55
+    NOT     décalage et aller à l'état 53
+    BOOL    décalage et aller à l'état 54
     MOINS   décalage et aller à l'état 8
 
     let_def      aller à l'état 23
     def_id       aller à l'état 12
     def_fun      aller à l'état 13
-    exp          aller à l'état 56
+    exp          aller à l'état 55
     arith_exp    aller à l'état 15
     atom_exp     aller à l'état 16
     control_exp  aller à l'état 17
@@ -664,64 +664,87 @@ Non-terminaux, suivis des règles où ils apparaissent
     if           aller à l'état 19
     let_exp      aller à l'état 20
     funcall_exp  aller à l'état 21
-    bool         aller à l'état 57
+    fun_id       aller à l'état 22
+    bool         aller à l'état 56
 
 
 État 38
 
    29 if_exp: if cond • then atom_exp else atom_exp
 
-    THEN  décalage et aller à l'état 58
+    THEN  décalage et aller à l'état 57
 
-    then  aller à l'état 59
+    then  aller à l'état 58
 
 
 État 39
 
-   15 arith_exp: arith_exp • MOINS arith_exp
-   16          | arith_exp • PLUS arith_exp
-   17          | arith_exp • DIV arith_exp
-   18          | arith_exp • MULT arith_exp
-   19          | arith_exp • CONCAT arith_exp
-   37 arg_list: arith_exp •
+   36 funcall_exp: fun_id LPAR • arg_list RPAR
 
-    PLUS    décalage et aller à l'état 32
-    MOINS   décalage et aller à l'état 33
-    MULT    décalage et aller à l'état 34
-    DIV     décalage et aller à l'état 35
-    CONCAT  décalage et aller à l'état 36
+    NUM     décalage et aller à l'état 1
+    ID      décalage et aller à l'état 2
+    FLOAT   décalage et aller à l'état 3
+    STRING  décalage et aller à l'état 4
+    LPAR    décalage et aller à l'état 5
+    IF      décalage et aller à l'état 7
+    MOINS   décalage et aller à l'état 8
 
-    $défaut  réduction par utilisation de la règle 37 (arg_list)
+    arith_exp    aller à l'état 59
+    atom_exp     aller à l'état 16
+    control_exp  aller à l'état 17
+    if_exp       aller à l'état 18
+    if           aller à l'état 19
+    funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
+    arg_list     aller à l'état 60
 
 
 État 40
-
-   36 funcall_exp: ID LPAR arg_list • RPAR
-   38 arg_list: arg_list • VIR arith_exp
-
-    RPAR  décalage et aller à l'état 60
-    VIR   décalage et aller à l'état 61
-
-
-État 41
 
    27 atom_exp: LPAR exp RPAR •
 
     $défaut  réduction par utilisation de la règle 27 (atom_exp)
 
 
-État 42
+État 41
 
     9 fun_head: ID LPAR • id_list RPAR
 
-    ID  décalage et aller à l'état 62
+    ID  décalage et aller à l'état 61
 
-    id_list  aller à l'état 63
+    id_list  aller à l'état 62
+
+
+État 42
+
+    7 def_id: LET ID EQ • exp
+
+    NUM     décalage et aller à l'état 1
+    ID      décalage et aller à l'état 2
+    FLOAT   décalage et aller à l'état 3
+    STRING  décalage et aller à l'état 4
+    LPAR    décalage et aller à l'état 5
+    LET     décalage et aller à l'état 6
+    IF      décalage et aller à l'état 7
+    MOINS   décalage et aller à l'état 8
+
+    let_def      aller à l'état 23
+    def_id       aller à l'état 12
+    def_fun      aller à l'état 13
+    exp          aller à l'état 63
+    arith_exp    aller à l'état 15
+    atom_exp     aller à l'état 16
+    control_exp  aller à l'état 17
+    if_exp       aller à l'état 18
+    if           aller à l'état 19
+    let_exp      aller à l'état 20
+    funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 43
 
-    7 def_id: LET ID EQ • exp
+    8 def_fun: LET fun_head EQ • exp
 
     NUM     décalage et aller à l'état 1
     ID      décalage et aller à l'état 2
@@ -743,56 +766,31 @@ Non-terminaux, suivis des règles où ils apparaissent
     if           aller à l'état 19
     let_exp      aller à l'état 20
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 44
-
-    8 def_fun: LET fun_head EQ • exp
-
-    NUM     décalage et aller à l'état 1
-    ID      décalage et aller à l'état 2
-    FLOAT   décalage et aller à l'état 3
-    STRING  décalage et aller à l'état 4
-    LPAR    décalage et aller à l'état 5
-    LET     décalage et aller à l'état 6
-    IF      décalage et aller à l'état 7
-    MOINS   décalage et aller à l'état 8
-
-    let_def      aller à l'état 23
-    def_id       aller à l'état 12
-    def_fun      aller à l'état 13
-    exp          aller à l'état 65
-    arith_exp    aller à l'état 15
-    atom_exp     aller à l'état 16
-    control_exp  aller à l'état 17
-    if_exp       aller à l'état 18
-    if           aller à l'état 19
-    let_exp      aller à l'état 20
-    funcall_exp  aller à l'état 21
-
-
-État 45
 
     2 prog: prog inst PV •
 
     $défaut  réduction par utilisation de la règle 2 (prog)
 
 
-État 46
+État 45
 
    34 let_exp: let_def IN atom_exp •
 
     $défaut  réduction par utilisation de la règle 34 (let_exp)
 
 
-État 47
+État 46
 
    35 let_exp: let_def IN let_exp •
 
     $défaut  réduction par utilisation de la règle 35 (let_exp)
 
 
-État 48
+État 47
 
    15 arith_exp: arith_exp • MOINS arith_exp
    16          | arith_exp • PLUS arith_exp
@@ -808,7 +806,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     $défaut  réduction par utilisation de la règle 16 (arith_exp)
 
 
-État 49
+État 48
 
    15 arith_exp: arith_exp • MOINS arith_exp
    15          | arith_exp MOINS arith_exp •
@@ -824,7 +822,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     $défaut  réduction par utilisation de la règle 15 (arith_exp)
 
 
-État 50
+État 49
 
    15 arith_exp: arith_exp • MOINS arith_exp
    16          | arith_exp • PLUS arith_exp
@@ -838,7 +836,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     $défaut  réduction par utilisation de la règle 18 (arith_exp)
 
 
-État 51
+État 50
 
    15 arith_exp: arith_exp • MOINS arith_exp
    16          | arith_exp • PLUS arith_exp
@@ -852,7 +850,7 @@ Non-terminaux, suivis des règles où ils apparaissent
     $défaut  réduction par utilisation de la règle 17 (arith_exp)
 
 
-État 52
+État 51
 
    15 arith_exp: arith_exp • MOINS arith_exp
    16          | arith_exp • PLUS arith_exp
@@ -864,26 +862,26 @@ Non-terminaux, suivis des règles où ils apparaissent
     $défaut  réduction par utilisation de la règle 19 (arith_exp)
 
 
-État 53
+État 52
 
    27 atom_exp: LPAR • exp RPAR
-   44 bool: LPAR • bool RPAR
+   45 bool: LPAR • bool RPAR
 
     NUM     décalage et aller à l'état 1
     ID      décalage et aller à l'état 2
     FLOAT   décalage et aller à l'état 3
     STRING  décalage et aller à l'état 4
-    LPAR    décalage et aller à l'état 53
+    LPAR    décalage et aller à l'état 52
     LET     décalage et aller à l'état 6
     IF      décalage et aller à l'état 7
-    NOT     décalage et aller à l'état 54
-    BOOL    décalage et aller à l'état 55
+    NOT     décalage et aller à l'état 53
+    BOOL    décalage et aller à l'état 54
     MOINS   décalage et aller à l'état 8
 
     let_def      aller à l'état 23
     def_id       aller à l'état 12
     def_fun      aller à l'état 13
-    exp          aller à l'état 66
+    exp          aller à l'état 65
     arith_exp    aller à l'état 15
     atom_exp     aller à l'état 16
     control_exp  aller à l'état 17
@@ -891,77 +889,79 @@ Non-terminaux, suivis des règles où ils apparaissent
     if           aller à l'état 19
     let_exp      aller à l'état 20
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
+    bool         aller à l'état 66
+
+
+État 53
+
+   43 bool: NOT • bool
+
+    NUM     décalage et aller à l'état 1
+    ID      décalage et aller à l'état 2
+    FLOAT   décalage et aller à l'état 3
+    STRING  décalage et aller à l'état 4
+    LPAR    décalage et aller à l'état 52
+    LET     décalage et aller à l'état 6
+    IF      décalage et aller à l'état 7
+    NOT     décalage et aller à l'état 53
+    BOOL    décalage et aller à l'état 54
+    MOINS   décalage et aller à l'état 8
+
+    let_def      aller à l'état 23
+    def_id       aller à l'état 12
+    def_fun      aller à l'état 13
+    exp          aller à l'état 55
+    arith_exp    aller à l'état 15
+    atom_exp     aller à l'état 16
+    control_exp  aller à l'état 17
+    if_exp       aller à l'état 18
+    if           aller à l'état 19
+    let_exp      aller à l'état 20
+    funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
     bool         aller à l'état 67
 
 
 État 54
 
-   42 bool: NOT • bool
+   40 bool: BOOL •
 
-    NUM     décalage et aller à l'état 1
-    ID      décalage et aller à l'état 2
-    FLOAT   décalage et aller à l'état 3
-    STRING  décalage et aller à l'état 4
-    LPAR    décalage et aller à l'état 53
-    LET     décalage et aller à l'état 6
-    IF      décalage et aller à l'état 7
-    NOT     décalage et aller à l'état 54
-    BOOL    décalage et aller à l'état 55
-    MOINS   décalage et aller à l'état 8
-
-    let_def      aller à l'état 23
-    def_id       aller à l'état 12
-    def_fun      aller à l'état 13
-    exp          aller à l'état 56
-    arith_exp    aller à l'état 15
-    atom_exp     aller à l'état 16
-    control_exp  aller à l'état 17
-    if_exp       aller à l'état 18
-    if           aller à l'état 19
-    let_exp      aller à l'état 20
-    funcall_exp  aller à l'état 21
-    bool         aller à l'état 68
+    $défaut  réduction par utilisation de la règle 40 (bool)
 
 
 État 55
 
-   39 bool: BOOL •
+   44 bool: exp • comp exp
 
-    $défaut  réduction par utilisation de la règle 39 (bool)
+    ISLT   décalage et aller à l'état 68
+    ISGT   décalage et aller à l'état 69
+    ISLEQ  décalage et aller à l'état 70
+    ISGEQ  décalage et aller à l'état 71
+    ISEQ   décalage et aller à l'état 72
+
+    comp  aller à l'état 73
 
 
 État 56
 
-   43 bool: exp • comp exp
+   31 cond: LPAR bool • RPAR
+   41 bool: bool • OR bool
+   42     | bool • AND bool
 
-    ISLT   décalage et aller à l'état 69
-    ISGT   décalage et aller à l'état 70
-    ISLEQ  décalage et aller à l'état 71
-    ISGEQ  décalage et aller à l'état 72
-    ISEQ   décalage et aller à l'état 73
-
-    comp  aller à l'état 74
+    RPAR  décalage et aller à l'état 74
+    AND   décalage et aller à l'état 75
+    OR    décalage et aller à l'état 76
 
 
 État 57
-
-   31 cond: LPAR bool • RPAR
-   40 bool: bool • OR bool
-   41     | bool • AND bool
-
-    RPAR  décalage et aller à l'état 75
-    AND   décalage et aller à l'état 76
-    OR    décalage et aller à l'état 77
-
-
-État 58
 
    32 then: THEN •
 
     $défaut  réduction par utilisation de la règle 32 (then)
 
 
-État 59
+État 58
 
    29 if_exp: if cond then • atom_exp else atom_exp
 
@@ -972,48 +972,49 @@ Non-terminaux, suivis des règles où ils apparaissent
     LPAR    décalage et aller à l'état 5
     IF      décalage et aller à l'état 7
 
-    atom_exp     aller à l'état 78
+    atom_exp     aller à l'état 77
     control_exp  aller à l'état 17
     if_exp       aller à l'état 18
     if           aller à l'état 19
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
+
+
+État 59
+
+   15 arith_exp: arith_exp • MOINS arith_exp
+   16          | arith_exp • PLUS arith_exp
+   17          | arith_exp • DIV arith_exp
+   18          | arith_exp • MULT arith_exp
+   19          | arith_exp • CONCAT arith_exp
+   38 arg_list: arith_exp •
+
+    PLUS    décalage et aller à l'état 32
+    MOINS   décalage et aller à l'état 33
+    MULT    décalage et aller à l'état 34
+    DIV     décalage et aller à l'état 35
+    CONCAT  décalage et aller à l'état 36
+
+    $défaut  réduction par utilisation de la règle 38 (arg_list)
 
 
 État 60
 
-   36 funcall_exp: ID LPAR arg_list RPAR •
+   36 funcall_exp: fun_id LPAR arg_list • RPAR
+   39 arg_list: arg_list • VIR arith_exp
 
-    $défaut  réduction par utilisation de la règle 36 (funcall_exp)
+    RPAR  décalage et aller à l'état 78
+    VIR   décalage et aller à l'état 79
 
 
 État 61
-
-   38 arg_list: arg_list VIR • arith_exp
-
-    NUM     décalage et aller à l'état 1
-    ID      décalage et aller à l'état 2
-    FLOAT   décalage et aller à l'état 3
-    STRING  décalage et aller à l'état 4
-    LPAR    décalage et aller à l'état 5
-    IF      décalage et aller à l'état 7
-    MOINS   décalage et aller à l'état 8
-
-    arith_exp    aller à l'état 79
-    atom_exp     aller à l'état 16
-    control_exp  aller à l'état 17
-    if_exp       aller à l'état 18
-    if           aller à l'état 19
-    funcall_exp  aller à l'état 21
-
-
-État 62
 
    10 id_list: ID •
 
     $défaut  réduction par utilisation de la règle 10 (id_list)
 
 
-État 63
+État 62
 
     9 fun_head: ID LPAR id_list • RPAR
    11 id_list: id_list • VIR ID
@@ -1022,93 +1023,93 @@ Non-terminaux, suivis des règles où ils apparaissent
     VIR   décalage et aller à l'état 81
 
 
-État 64
+État 63
 
     7 def_id: LET ID EQ exp •
 
     $défaut  réduction par utilisation de la règle 7 (def_id)
 
 
-État 65
+État 64
 
     8 def_fun: LET fun_head EQ exp •
 
     $défaut  réduction par utilisation de la règle 8 (def_fun)
 
 
-État 66
+État 65
 
    27 atom_exp: LPAR exp • RPAR
-   43 bool: exp • comp exp
+   44 bool: exp • comp exp
 
-    RPAR   décalage et aller à l'état 41
-    ISLT   décalage et aller à l'état 69
-    ISGT   décalage et aller à l'état 70
-    ISLEQ  décalage et aller à l'état 71
-    ISGEQ  décalage et aller à l'état 72
-    ISEQ   décalage et aller à l'état 73
+    RPAR   décalage et aller à l'état 40
+    ISLT   décalage et aller à l'état 68
+    ISGT   décalage et aller à l'état 69
+    ISLEQ  décalage et aller à l'état 70
+    ISGEQ  décalage et aller à l'état 71
+    ISEQ   décalage et aller à l'état 72
 
-    comp  aller à l'état 74
+    comp  aller à l'état 73
+
+
+État 66
+
+   41 bool: bool • OR bool
+   42     | bool • AND bool
+   45     | LPAR bool • RPAR
+
+    RPAR  décalage et aller à l'état 82
+    AND   décalage et aller à l'état 75
+    OR    décalage et aller à l'état 76
 
 
 État 67
 
-   40 bool: bool • OR bool
-   41     | bool • AND bool
-   44     | LPAR bool • RPAR
+   41 bool: bool • OR bool
+   42     | bool • AND bool
+   43     | NOT bool •
 
-    RPAR  décalage et aller à l'état 82
-    AND   décalage et aller à l'état 76
-    OR    décalage et aller à l'état 77
+    $défaut  réduction par utilisation de la règle 43 (bool)
 
 
 État 68
 
-   40 bool: bool • OR bool
-   41     | bool • AND bool
-   42     | NOT bool •
-
-    $défaut  réduction par utilisation de la règle 42 (bool)
-
-
-État 69
-
-   45 comp: ISLT •
-
-    $défaut  réduction par utilisation de la règle 45 (comp)
-
-
-État 70
-
-   46 comp: ISGT •
+   46 comp: ISLT •
 
     $défaut  réduction par utilisation de la règle 46 (comp)
 
 
-État 71
+État 69
 
-   47 comp: ISLEQ •
+   47 comp: ISGT •
 
     $défaut  réduction par utilisation de la règle 47 (comp)
 
 
-État 72
+État 70
 
-   48 comp: ISGEQ •
+   48 comp: ISLEQ •
 
     $défaut  réduction par utilisation de la règle 48 (comp)
 
 
-État 73
+État 71
 
-   49 comp: ISEQ •
+   49 comp: ISGEQ •
 
     $défaut  réduction par utilisation de la règle 49 (comp)
 
 
-État 74
+État 72
 
-   43 bool: exp comp • exp
+   50 comp: ISEQ •
+
+    $défaut  réduction par utilisation de la règle 50 (comp)
+
+
+État 73
+
+   44 bool: exp comp • exp
 
     NUM     décalage et aller à l'état 1
     ID      décalage et aller à l'état 2
@@ -1130,34 +1131,35 @@ Non-terminaux, suivis des règles où ils apparaissent
     if           aller à l'état 19
     let_exp      aller à l'état 20
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
-État 75
+État 74
 
    31 cond: LPAR bool RPAR •
 
     $défaut  réduction par utilisation de la règle 31 (cond)
 
 
-État 76
+État 75
 
-   41 bool: bool AND • bool
+   42 bool: bool AND • bool
 
     NUM     décalage et aller à l'état 1
     ID      décalage et aller à l'état 2
     FLOAT   décalage et aller à l'état 3
     STRING  décalage et aller à l'état 4
-    LPAR    décalage et aller à l'état 53
+    LPAR    décalage et aller à l'état 52
     LET     décalage et aller à l'état 6
     IF      décalage et aller à l'état 7
-    NOT     décalage et aller à l'état 54
-    BOOL    décalage et aller à l'état 55
+    NOT     décalage et aller à l'état 53
+    BOOL    décalage et aller à l'état 54
     MOINS   décalage et aller à l'état 8
 
     let_def      aller à l'état 23
     def_id       aller à l'état 12
     def_fun      aller à l'état 13
-    exp          aller à l'état 56
+    exp          aller à l'état 55
     arith_exp    aller à l'état 15
     atom_exp     aller à l'état 16
     control_exp  aller à l'état 17
@@ -1165,28 +1167,29 @@ Non-terminaux, suivis des règles où ils apparaissent
     if           aller à l'état 19
     let_exp      aller à l'état 20
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
     bool         aller à l'état 84
 
 
-État 77
+État 76
 
-   40 bool: bool OR • bool
+   41 bool: bool OR • bool
 
     NUM     décalage et aller à l'état 1
     ID      décalage et aller à l'état 2
     FLOAT   décalage et aller à l'état 3
     STRING  décalage et aller à l'état 4
-    LPAR    décalage et aller à l'état 53
+    LPAR    décalage et aller à l'état 52
     LET     décalage et aller à l'état 6
     IF      décalage et aller à l'état 7
-    NOT     décalage et aller à l'état 54
-    BOOL    décalage et aller à l'état 55
+    NOT     décalage et aller à l'état 53
+    BOOL    décalage et aller à l'état 54
     MOINS   décalage et aller à l'état 8
 
     let_def      aller à l'état 23
     def_id       aller à l'état 12
     def_fun      aller à l'état 13
-    exp          aller à l'état 56
+    exp          aller à l'état 55
     arith_exp    aller à l'état 15
     atom_exp     aller à l'état 16
     control_exp  aller à l'état 17
@@ -1194,10 +1197,11 @@ Non-terminaux, suivis des règles où ils apparaissent
     if           aller à l'état 19
     let_exp      aller à l'état 20
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
     bool         aller à l'état 85
 
 
-État 78
+État 77
 
    29 if_exp: if cond then atom_exp • else atom_exp
 
@@ -1206,22 +1210,32 @@ Non-terminaux, suivis des règles où ils apparaissent
     else  aller à l'état 87
 
 
+État 78
+
+   36 funcall_exp: fun_id LPAR arg_list RPAR •
+
+    $défaut  réduction par utilisation de la règle 36 (funcall_exp)
+
+
 État 79
 
-   15 arith_exp: arith_exp • MOINS arith_exp
-   16          | arith_exp • PLUS arith_exp
-   17          | arith_exp • DIV arith_exp
-   18          | arith_exp • MULT arith_exp
-   19          | arith_exp • CONCAT arith_exp
-   38 arg_list: arg_list VIR arith_exp •
+   39 arg_list: arg_list VIR • arith_exp
 
-    PLUS    décalage et aller à l'état 32
-    MOINS   décalage et aller à l'état 33
-    MULT    décalage et aller à l'état 34
-    DIV     décalage et aller à l'état 35
-    CONCAT  décalage et aller à l'état 36
+    NUM     décalage et aller à l'état 1
+    ID      décalage et aller à l'état 2
+    FLOAT   décalage et aller à l'état 3
+    STRING  décalage et aller à l'état 4
+    LPAR    décalage et aller à l'état 5
+    IF      décalage et aller à l'état 7
+    MOINS   décalage et aller à l'état 8
 
-    $défaut  réduction par utilisation de la règle 38 (arg_list)
+    arith_exp    aller à l'état 88
+    atom_exp     aller à l'état 16
+    control_exp  aller à l'état 17
+    if_exp       aller à l'état 18
+    if           aller à l'état 19
+    funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 80
@@ -1235,41 +1249,41 @@ Non-terminaux, suivis des règles où ils apparaissent
 
    11 id_list: id_list VIR • ID
 
-    ID  décalage et aller à l'état 88
+    ID  décalage et aller à l'état 89
 
 
 État 82
 
-   44 bool: LPAR bool RPAR •
+   45 bool: LPAR bool RPAR •
 
-    $défaut  réduction par utilisation de la règle 44 (bool)
+    $défaut  réduction par utilisation de la règle 45 (bool)
 
 
 État 83
 
-   43 bool: exp comp exp •
+   44 bool: exp comp exp •
 
-    $défaut  réduction par utilisation de la règle 43 (bool)
+    $défaut  réduction par utilisation de la règle 44 (bool)
 
 
 État 84
 
-   40 bool: bool • OR bool
-   41     | bool • AND bool
-   41     | bool AND bool •
+   41 bool: bool • OR bool
+   42     | bool • AND bool
+   42     | bool AND bool •
 
-    $défaut  réduction par utilisation de la règle 41 (bool)
+    $défaut  réduction par utilisation de la règle 42 (bool)
 
 
 État 85
 
-   40 bool: bool • OR bool
-   40     | bool OR bool •
-   41     | bool • AND bool
+   41 bool: bool • OR bool
+   41     | bool OR bool •
+   42     | bool • AND bool
 
-    AND  décalage et aller à l'état 76
+    AND  décalage et aller à l'état 75
 
-    $défaut  réduction par utilisation de la règle 40 (bool)
+    $défaut  réduction par utilisation de la règle 41 (bool)
 
 
 État 86
@@ -1290,21 +1304,40 @@ Non-terminaux, suivis des règles où ils apparaissent
     LPAR    décalage et aller à l'état 5
     IF      décalage et aller à l'état 7
 
-    atom_exp     aller à l'état 89
+    atom_exp     aller à l'état 90
     control_exp  aller à l'état 17
     if_exp       aller à l'état 18
     if           aller à l'état 19
     funcall_exp  aller à l'état 21
+    fun_id       aller à l'état 22
 
 
 État 88
+
+   15 arith_exp: arith_exp • MOINS arith_exp
+   16          | arith_exp • PLUS arith_exp
+   17          | arith_exp • DIV arith_exp
+   18          | arith_exp • MULT arith_exp
+   19          | arith_exp • CONCAT arith_exp
+   39 arg_list: arg_list VIR arith_exp •
+
+    PLUS    décalage et aller à l'état 32
+    MOINS   décalage et aller à l'état 33
+    MULT    décalage et aller à l'état 34
+    DIV     décalage et aller à l'état 35
+    CONCAT  décalage et aller à l'état 36
+
+    $défaut  réduction par utilisation de la règle 39 (arg_list)
+
+
+État 89
 
    11 id_list: id_list VIR ID •
 
     $défaut  réduction par utilisation de la règle 11 (id_list)
 
 
-État 89
+État 90
 
    29 if_exp: if cond then atom_exp else atom_exp •
 

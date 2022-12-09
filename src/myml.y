@@ -20,6 +20,8 @@ int get_label(){
   return label++;
 }
 
+int static detect_funcall = 0;
+
 void yyerror (char* s) {
    printf("\n%s\n",s);
  }
@@ -39,13 +41,13 @@ void yyerror (char* s) {
 %token <val_float> FLOAT 
 
 %type <val_int>  then else 
-%type <val_string>  comp 
+%type <val_string>  comp fun_id
 
 %token  STRING 
 
 %token PV LPAR RPAR LET IN VIR
 
-%token IF THEN ELSE
+%token IF THEN ELSE 
 
 %token ISLT ISGT ISLEQ ISGEQ ISEQ
 %left ISEQ
@@ -89,20 +91,16 @@ let_def : def_id
 | def_fun 
 ;
 
-def_id : LET ID EQ exp          {
-                            
-                                    set_symbol_value($2, offset++);
-
-                                  }     
+def_id : LET ID EQ exp          { set_symbol_value($2, offset++);}     
 ;
 
-def_fun : LET fun_head EQ exp {printf("Une définition de fonction\n");}
+def_fun : LET fun_head EQ exp {detect_funcall=0;}
 ;
 
 fun_head : ID LPAR id_list RPAR 
 ;
 
-id_list : ID
+id_list : ID {detect_funcall=1;}
 | id_list VIR ID
 ;
 
@@ -113,18 +111,21 @@ exp : arith_exp
 
 arith_exp : MOINS arith_exp %prec UNA
 | arith_exp MOINS arith_exp {printf("SUBI \n") ;}
-| arith_exp PLUS arith_exp {printf("ADDI \n") ;  }
+| arith_exp PLUS arith_exp {if(detect_funcall==0) printf("ADDI \n") ;  }
 | arith_exp DIV arith_exp {printf("DIVI\n");}
-| arith_exp MULT arith_exp {printf("MULTI \n");}
+| arith_exp MULT arith_exp {if(detect_funcall==0) printf("MULTI \n");}
 | arith_exp CONCAT arith_exp
 | atom_exp 
 ;
 
-atom_exp : NUM {printf("LOADI %d \n", $1);}
+atom_exp : NUM { if(detect_funcall==0) printf("LOADI %d \n", $1);}
 | FLOAT        {printf("LOADI %f \n", $1) ;}
 | STRING    
 | ID      {
-          if(get_symbol_value($1)==-1)
+      if(detect_funcall==1){
+         
+      }else {
+            if(get_symbol_value($1)==-1)
           {
           printf("erreur : %s non declarée \n" , $1);
           exit (-1);
@@ -133,8 +134,10 @@ atom_exp : NUM {printf("LOADI %d \n", $1);}
           {
           symb_value_type x = get_symbol_value($1);printf("LOAD (fp + %d)\n", x);
           }}
+      }
+         
 | control_exp
-| funcall_exp
+| funcall_exp 
 | LPAR exp RPAR
 ;
 
@@ -167,8 +170,10 @@ let_exp : let_def IN atom_exp {printf("DRCP\n"); offset--; remove_symbol_value()
 | let_def IN let_exp
 ;
 
-funcall_exp : ID LPAR arg_list RPAR
+funcall_exp : fun_id LPAR arg_list RPAR {printf("CALL call_%s",$1);}
 ;
+
+fun_id : ID {printf("SAVERP\n");}
 
 arg_list : arith_exp
 | arg_list VIR  arith_exp
