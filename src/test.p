@@ -1,7 +1,5 @@
-LOADI 1 
-LOADI 2 
-SAVERP
-LOADI 1 
-LOADI 2 
-CALL call_g
+LOADI 3 
+SAVEFP
+LOAD (fp + 0)
+CALL call_plusUn
 RESTORE 1

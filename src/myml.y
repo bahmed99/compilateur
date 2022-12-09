@@ -24,6 +24,7 @@ int get_label(){
 }
 
 int static detect_funcall = 0;
+int static nb_param = 0;
 
 void yyerror (char* s) {
    printf("\n%s\n",s);
@@ -102,8 +103,8 @@ def_fun : LET fun_head EQ exp {stdout = file_funcall;printf("return;\n}\n");dete
 
 fun_head : ID LPAR id_list RPAR {stdout = file_funcall;printf("void call_%s(){\n",$1); };
 
-id_list : ID {detect_funcall=1;set_symbol_value($1, offset_func++);}
-| id_list VIR ID {detect_funcall=1;set_symbol_value($3, offset_func++);}
+id_list : ID {nb_param=1;detect_funcall=1;set_symbol_value($1, offset_func++);}
+| id_list VIR ID {nb_param=nb_param+1;detect_funcall=1;set_symbol_value($3, offset_func++);}
 ;
 
 
@@ -112,7 +113,15 @@ exp : arith_exp
 ;
 
 arith_exp : MOINS arith_exp %prec UNA
-| arith_exp MOINS arith_exp 
+| arith_exp MOINS arith_exp {if(detect_funcall==0) 
+{
+ stdout=file_out;
+} 
+else{
+  stdout = file_funcall; 
+  
+}
+ printf("SUBI \n");}
 | arith_exp PLUS arith_exp 
 {if(detect_funcall==0) 
 {
@@ -138,7 +147,8 @@ printf("MULTI \n");
 | atom_exp 
 ;
 
-atom_exp : NUM { if(detect_funcall==0){ stdout=file_out;printf("LOADI %d \n", $1);}}
+atom_exp : NUM { if(detect_funcall==0){ stdout=file_out;printf("LOADI %d \n", $1);}
+else{stdout=file_funcall ;printf("LOADI %d \n", $1);}}
 | FLOAT        {printf("LOADI %f \n", $1) ;}
 | STRING    
 | ID      {
@@ -205,14 +215,23 @@ let_exp : let_def IN atom_exp {if(detect_funcall==0)
                             else{
                               
                               stdout=file_funcall;}
-                              printf("DRCP\n");  }
+                              printf("DRCP\n"); 
+                              offset_func--;
+                              remove_symbol_value();
+                              
+                               }
 | let_def IN let_exp
 ;
 
-funcall_exp : fun_id LPAR arg_list RPAR {printf("CALL call_%s\n",$1);stdout=file_out;printf("RESTORE %d\n",offset++);}
+funcall_exp : fun_id LPAR arg_list RPAR 
+{if(detect_funcall==0) 
+{stdout=file_out; printf("CALL call_%s\n",$1);printf("RESTORE %d\n",nb_param);}
+else{
+  stdout=file_funcall; printf("CALL call_%s\n",$1);printf("RESTORE %d\n",nb_param);}
+}
 ;
 
-fun_id : ID {printf("SAVERP\n");}
+fun_id : ID {printf("SAVEFP\n");}
 
 arg_list : arith_exp
 | arg_list VIR  arith_exp

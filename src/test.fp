@@ -1,9 +1,6 @@
-void call_g(){
+void call_plusUn(){
 LOAD (fp + 1)
-LOAD (fp + 2)
+LOADI 1 
 ADDI 
-LOAD (fp + 3)
-ADDI 
-DRCP
 return;
 }
