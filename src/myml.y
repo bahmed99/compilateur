@@ -10,12 +10,15 @@
 
 FILE * file_in = NULL;
 FILE * file_out = NULL;
+
+FILE * file_funcall =NULL;
   
 extern int yylex();
 extern int yyparse();
 
 int static label = 0;
 int static offset = 0;
+int static offset_func=1;
 int get_label(){
   return label++;
 }
@@ -91,17 +94,16 @@ let_def : def_id
 | def_fun 
 ;
 
-def_id : LET ID EQ exp          { set_symbol_value($2, offset++);}     
+def_id : LET ID EQ exp    { if(detect_funcall==0) {set_symbol_value($2, offset++);}else{set_symbol_value($2, offset_func++);}}     
 ;
 
-def_fun : LET fun_head EQ exp {detect_funcall=0;}
+def_fun : LET fun_head EQ exp {stdout = file_funcall;printf("return;\n}\n");detect_funcall=0;}
 ;
 
-fun_head : ID LPAR id_list RPAR 
-;
+fun_head : ID LPAR id_list RPAR {stdout = file_funcall;printf("void call_%s(){\n",$1); };
 
-id_list : ID {detect_funcall=1;}
-| id_list VIR ID
+id_list : ID {detect_funcall=1;set_symbol_value($1, offset_func++);}
+| id_list VIR ID {detect_funcall=1;set_symbol_value($3, offset_func++);}
 ;
 
 
@@ -110,21 +112,50 @@ exp : arith_exp
 ;
 
 arith_exp : MOINS arith_exp %prec UNA
-| arith_exp MOINS arith_exp {printf("SUBI \n") ;}
-| arith_exp PLUS arith_exp {if(detect_funcall==0) printf("ADDI \n") ;  }
-| arith_exp DIV arith_exp {printf("DIVI\n");}
-| arith_exp MULT arith_exp {if(detect_funcall==0) printf("MULTI \n");}
+| arith_exp MOINS arith_exp 
+| arith_exp PLUS arith_exp 
+{if(detect_funcall==0) 
+{
+ stdout=file_out;
+} 
+else{
+  stdout = file_funcall; 
+  
+}
+ printf("ADDI \n");}
+| arith_exp DIV arith_exp 
+| arith_exp MULT arith_exp 
+{if(detect_funcall==0) 
+{stdout=file_out;
+  }
+else{
+  stdout = file_funcall; 
+
+}
+printf("MULTI \n");
+}
 | arith_exp CONCAT arith_exp
 | atom_exp 
 ;
 
-atom_exp : NUM { if(detect_funcall==0) printf("LOADI %d \n", $1);}
+atom_exp : NUM { if(detect_funcall==0){ stdout=file_out;printf("LOADI %d \n", $1);}}
 | FLOAT        {printf("LOADI %f \n", $1) ;}
 | STRING    
 | ID      {
       if(detect_funcall==1){
+         if(get_symbol_value($1)==-1)
+          {
+          printf("erreur : %s non declarée \n" , $1);
+          exit (-1);
+          }
+          else{
+          stdout = file_funcall; 
+          symb_value_type x = get_symbol_value($1);printf("LOAD (fp + %d)\n", x);
+
+          }
          
       }else {
+          stdout=file_out;
             if(get_symbol_value($1)==-1)
           {
           printf("erreur : %s non declarée \n" , $1);
@@ -166,11 +197,19 @@ else : ELSE {
 
 
 
-let_exp : let_def IN atom_exp {printf("DRCP\n"); offset--; remove_symbol_value(); }
+let_exp : let_def IN atom_exp {if(detect_funcall==0)
+{                             stdout=file_out;
+                                offset--; 
+                                remove_symbol_value();
+}
+                            else{
+                              
+                              stdout=file_funcall;}
+                              printf("DRCP\n");  }
 | let_def IN let_exp
 ;
 
-funcall_exp : fun_id LPAR arg_list RPAR {printf("CALL call_%s",$1);}
+funcall_exp : fun_id LPAR arg_list RPAR {printf("CALL call_%s\n",$1);stdout=file_out;printf("RESTORE %d\n",offset++);}
 ;
 
 fun_id : ID {printf("SAVERP\n");}
@@ -202,6 +241,7 @@ int main (int argc, char* argv[]) {
 
      for instance, one could grab input and ouput file names 
      in command line arguements instead of having them hard coded */
+  file_funcall = fopen (argv[3], "w");
 
   stderr = stdin;
    file_out = fopen(argv[2], "w");
