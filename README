@@ -1,0 +1,38 @@
+Pendant ce projet, on a pu réaliser un compilateur qui permet de :
+
+	- Évaluer des expressions arithmétiques (par exemple 2+3*2) en P-code.
+
+	- Assurer le mécanisme de déclarations implicites et séquentielles :
+Ce cas comprend l'ajout de l'offset de définition d'une variable dans la table des symboles afin de la récupérer lors de son appel à droite d'une expression (R value) , et pour cela, on a utilisé une variable statique « offset » qui s'incrémente à chaque ajout.
+On a aussi traité le cas d'utilisation d'une variable non déclarée, autrement dit, n'existe pas dans la table des symboles.
+
+	- Assimiler le mécanisme de déclarations locales,  portée et masquage :
+La commande 'DRCP' ajoutée lors de l'évaluation du code en P-code
+
+	- Évaluer les expressions conditionnelles simples et imbriquées en P-code :
+Dans ce cas, on a opté pour utiliser une variable statique « label » qui nous a permis de gérer la numérotation des blocs de branchement.
+
+	- Assimiler le mécanisme qui permet de déclarer et appeler une fonction simple ainsi qu'une fonction récursive : 
+	
+Dans ce contexte, on a ajouté une variable statique  «detect_funcall» qui joue le rôle d'une variable booléenne ( 0 ou 1 ).
+Cette variable est mise à 1 lorsque qu'on vient de déclarer une fonction et remise à 0 après la déclaration, par conséquent, elle nous permet de gérer la sortie standard : 
+Si cette variable = 0, on écrit le P-code dans le fichier .p 
+sinon, on est dans le cas de déclaration d'une fonction et donc on évalue le corps de cette fonction en P-code dans le fichier .fp
+
+
+
+
+Pour compiler le projet :
+$ make 
+
+
+Afin de vérifier les différents cas évoqués ci-dessus, on a créé un dossier nommé "test" qui contient les fichiers : test0.ml jusqu'à test test6.ml où chaque fichier contient un code permettant de tester un parmi ces cas.
+
+Pour tester le test numéro n, il suffit d'exécuter :
+$ make test f="testn" 
+
+Par exemple pour tester les expressions conditionnelles imbriquées (fichier test4.ml) :
+$ make test f="test4" 
+
+Pour nettoyer le projet:
+$ make clean
